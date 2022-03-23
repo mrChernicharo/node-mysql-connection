@@ -1,6 +1,6 @@
 
 
-GET http://localhost:3333/users/3
+GET http://localhost:3333/users/24
 ###
 
 GET http://localhost:3333/users/
@@ -10,37 +10,27 @@ POST http://localhost:3333/users/
 content-type: application/json
 
 {
-	"name": "John Doe",
-    "email": "johnDoe@gmail.com"
+	"nickname": "John Doe"
 }
 ###
 
-PUT http://localhost:3333/users/1
+
+PUT http://localhost:3333/users/24
 content-type: application/json
 
 {
-	"name": "Tom Roe",
-    "email": "tomRoe@gmail.com"
-}
-###
-
-PUT http://localhost:3333/users/2
-content-type: application/json
-
-{
-    "email": "johnDoidão@gmail.com"
+    "nickname": "john Doidão"
 }
 
 ###
-PUT http://localhost:3333/users/1
+PUT http://localhost:3333/users/24
 content-type: application/json
 
 {
 
 }
+
 ###
 
-DELETE http://localhost:3333/users/3
+DELETE http://localhost:3333/users/13
 ###
-
-

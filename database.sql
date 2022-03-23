@@ -6,8 +6,7 @@ use chat_app;
 ************************/
 create table users(
 	id int auto_increment,
-	name varchar(100) not null,
-	email varchar(100) not null,
+	nickname varchar(100) not null,
 	created_at datetime default current_timestamp,
 
 	constraint pk_users_id primary key (id)
