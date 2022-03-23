@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=input, initial-scale=1.0" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="shortcut icon" href="./assets/js.svg" type="image/x-icon" />
+    <title>Chat App</title>
+  </head>
+  <body>
+    <h1>Chat app <i data-feather="sun"></i></h1>
+
+    <form id="nick-form">
+      <label for="nick-input">Nickname</label>
+      <input type="text" id="nick-input" placeholder="enter your nickname" />
+      <button>Register</button>
+    </form>
+
+    <!-- prettier-ignore -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <script type="module" src="./login.js"></script>
+  </body>
+</html>

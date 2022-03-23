@@ -17,14 +17,28 @@ export class UsersController {
     const [rows, fields] = await db.execute(
       `select * from users where id = ${id};`
     );
-    return rows;
+    return rows[0];
+  }
+
+  async getUserByNick({ nick }) {
+    const [rows, fields] = await db.execute(
+      `select * from users where name = ${nick};`
+    );
+    return rows[0];
   }
 
   async createUser({ name, email }) {
-    const [rows, fields] = await db.execute(
+    await db.execute(
       `insert into users (name, email, created_at) values ('${name}', '${email}', '${getCurrentTimestamp()}');`
     );
-    return rows;
+
+    const [rows, fields] = await db.execute(
+      "select max(id)  as maxId from users;"
+    );
+
+    const { maxId } = rows[0];
+    const user = await this.getUserById({ id: maxId });
+    return user;
   }
 
   async updateUser({ id, name, email }) {
@@ -40,16 +54,19 @@ export class UsersController {
     const query = `update users set ${instructions} where id = ${id}`;
 
     const [rows, fields] = await db.execute(query);
+    const user = await this.getUserById({ id });
 
-    return rows;
+    return user;
   }
 
   async deleteUser({ id }) {
+    const user = await this.getUserById({ id });
+
     const [rows, fields] = await db.execute(
       `delete from users where id = ${id};`
     );
 
-    return rows;
+    return user;
   }
 }
 
