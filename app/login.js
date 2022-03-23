@@ -56,6 +56,7 @@ async function createUser(value) {
     appUser[key] = data[key];
   });
 
+  localStorage.setItem("@user", JSON.stringify(data));
   return data;
   // } else {
   // return user;
