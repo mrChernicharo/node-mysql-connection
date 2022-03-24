@@ -54,9 +54,12 @@ DELETE http://localhost:3333/users/36
 
 
 
-GET http://localhost:3333/rooms
+GET http://localhost:3333/rooms/5
 ###
 
+
+GET http://localhost:3333/rooms
+###
 
 
 
@@ -66,4 +69,8 @@ content-type: application/json
 {
     "roomName": "Template"
 }
+###
+
+
+DELETE http://localhost:3333/rooms/7
 ###

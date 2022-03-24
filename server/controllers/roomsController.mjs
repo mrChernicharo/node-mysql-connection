@@ -7,6 +7,14 @@ export class RoomsController {
 		this.db = db;
 	}
 
+	async getRoomById({ id }) {
+		const [rows, fields] = await db.execute(
+			`select * from rooms where id = ${id};`
+		);
+		console.log(rows);
+		return rows[0] ?? null;
+	}
+
 	async listAllRooms() {
 		const [rows, fields] = await db.execute(`select * from rooms`);
 
@@ -18,7 +26,19 @@ export class RoomsController {
 			`insert into rooms (name, created_at) values ('${roomName}', '${getCurrentTimestamp()}')`
 		);
 
-		console.log(response);
+		const { insertId } = response;
+		const room = this.getRoomById({ id: insertId });
+
+		console.log(room);
+		return room;
+	}
+
+	async deleteRoom({ id }) {
+		const room = this.getRoomById({ id });
+
+		await db.execute(`delete from rooms where id = '${id}';`);
+
+		return room;
 	}
 }
 
