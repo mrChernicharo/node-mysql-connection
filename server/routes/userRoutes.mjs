@@ -6,7 +6,6 @@ const usersRoutes = new Router();
 usersRoutes.get('/nick', async (req, res) => {
 	try {
 		const { nickname } = req.query;
-		console.log({ nickname, q: req.query });
 		const data = await usersController.getUserByNick({ nickname });
 
 		res.json(data).status(200);
@@ -38,6 +37,7 @@ usersRoutes.get('/', async (req, res) => {
 usersRoutes.post('/', async (req, res) => {
 	try {
 		const { nickname } = req.body;
+		console.log(req.body);
 		const data = await usersController.createUser({ nickname });
 		console.log(data);
 

@@ -23,7 +23,7 @@ export class UsersController {
 		const [rows, fields] = await db.execute(
 			`select * from users where nickname = '${nickname}';`
 		);
-		return rows[0];
+		return rows[0] ?? null;
 	}
 
 	async createUser({ nickname }) {
@@ -42,21 +42,25 @@ export class UsersController {
 	}
 
 	async updateUser({ id, nickname }) {
-		const userData = { nickname };
-		const instructions = [];
+		try {
+			const userData = { nickname };
+			const instructions = [];
 
-		Object.entries(userData).forEach(([k, v]) => {
-			if (!!v) instructions.push(`${k} = '${v}'`);
-		});
+			Object.entries(userData).forEach(([k, v]) => {
+				if (!!v) instructions.push(`${k} = '${v}'`);
+			});
 
-		if (!instructions.length) return await this.getUserById({ id });
+			if (!instructions.length) return await this.getUserById({ id });
 
-		const query = `update users set ${instructions} where id = ${id}`;
-		await db.execute(query);
+			const query = `update users set ${instructions} where id = ${id}`;
+			await db.execute(query);
 
-		const user = await this.getUserById({ id });
+			const user = await this.getUserById({ id });
 
-		return user;
+			return user;
+		} catch (err) {
+			throw Error(err);
+		}
 	}
 
 	async deleteUser({ id }) {

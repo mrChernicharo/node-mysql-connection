@@ -11,11 +11,20 @@ console.log(io, nickInput);
 form.addEventListener('submit', async e => {
 	e.preventDefault();
 	console.log(nickInput.value);
-	const userExists = await getUserByNick(nickInput.value);
-	console.log({ userExists });
-	const user = await createUser(nickInput.value);
-	console.log({ user });
-	// location.assign('/app/app.html');
+
+	let user = await getUserByNick(nickInput.value);
+
+	if (!user) user = await createUser(nickInput.value);
+
+	Object.keys(user).forEach(key => {
+		appUser[key] = user[key];
+	});
+
+	console.log({ appUser, user });
+
+	localStorage.setItem('@user', JSON.stringify(user));
+
+	location.assign('/app/app.html');
 });
 
 async function getUsers() {
@@ -33,8 +42,11 @@ async function getUserById(id) {
 }
 
 async function getUserByNick(nick) {
-	const res = await fetch(`http://127.0.0.1:3333/users?nick=${nick}`);
+	const res = await fetch(
+		`http://127.0.0.1:3333/users/nick?nickname=${nick}`
+	);
 	const data = await res.json();
+	console.log({ data });
 
 	return data;
 }
@@ -53,12 +65,7 @@ async function createUser(value) {
 	});
 
 	const data = await res.json();
-	console.log(data);
-	Object.keys(data).forEach(key => {
-		appUser[key] = data[key];
-	});
 
-	localStorage.setItem('@user', JSON.stringify(data));
 	return data;
 	// } else {
 	// return user;
