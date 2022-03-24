@@ -4,6 +4,7 @@ import cors from 'cors';
 dotenv.config();
 
 import { usersRoutes } from './routes/userRoutes.mjs';
+import { roomsRoutes } from './routes/roomRoutes.mjs';
 
 const app = express();
 app.use(
@@ -17,6 +18,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3334;
 
 app.use('/users', usersRoutes);
+app.use('/rooms', roomsRoutes);
 
 app.listen(PORT, () => {
 	console.log(`server listening at port:${PORT}`);

@@ -4,8 +4,6 @@ const appUser = {};
 const nickInput = document.querySelector('#nick-input');
 const form = document.querySelector('#nick-form');
 
-// getUsers();
-
 console.log(io, nickInput);
 
 form.addEventListener('submit', async e => {
@@ -16,13 +14,7 @@ form.addEventListener('submit', async e => {
 
 	if (!user) user = await createUser(nickInput.value);
 
-	Object.keys(user).forEach(key => {
-		appUser[key] = user[key];
-	});
-
-	console.log({ appUser, user });
-
-	localStorage.setItem('@user', JSON.stringify(user));
+	setGlobalUser(user);
 
 	location.assign('/app/app.html');
 });
@@ -51,15 +43,11 @@ async function getUserByNick(nick) {
 	return data;
 }
 
-async function createUser(value) {
-	// todo check if exists
-
-	// if (!user) {
-	// create
+async function createUser(nickname) {
 	const res = await fetch('http://localhost:3333/users', {
 		method: 'POST',
 		body: JSON.stringify({
-			nickname: value,
+			nickname,
 		}),
 		headers: [['Content-Type', 'application/json']],
 	});
@@ -67,9 +55,30 @@ async function createUser(value) {
 	const data = await res.json();
 
 	return data;
-	// } else {
-	// return user;
-	// }
+}
+
+async function createRoom(roomName) {
+	const res = await fetch('http://localhost:3333/rooms', {
+		method: 'POST',
+		body: JSON.stringify({
+			roomName,
+		}),
+		headers: [['Content-Type', 'application/json']],
+	});
+
+	const data = await res.json();
+
+	return data;
+}
+
+function setGlobalUser(userData) {
+	Object.keys(userData).forEach(key => {
+		appUser[key] = userData[key];
+	});
+
+	localStorage.setItem('@user', JSON.stringify(userData));
+
+	console.log({ appUser, user });
 }
 
 feather.replace();

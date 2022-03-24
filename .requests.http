@@ -44,3 +44,26 @@ content-type: application/json
 
 DELETE http://localhost:3333/users/36
 ###
+
+
+
+
+
+
+
+
+
+
+GET http://localhost:3333/rooms
+###
+
+
+
+
+POST http://localhost:3333/rooms
+content-type: application/json
+
+{
+    "roomName": "Template"
+}
+###
