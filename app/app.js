@@ -1,7 +1,7 @@
-const user = JSON.parse(localStorage.getItem("@user"));
+const user = JSON.parse(localStorage.getItem('@user'));
 
-const headerNick = document.querySelector("#nick-display");
+const headerNick = document.querySelector('#nick-display');
 
-headerNick.textContent = user.name;
+headerNick.textContent = user.nickname;
 
 console.log(user);

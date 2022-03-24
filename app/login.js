@@ -11,6 +11,8 @@ console.log(io, nickInput);
 form.addEventListener('submit', async e => {
 	e.preventDefault();
 	console.log(nickInput.value);
+	const userExists = await getUserByNick(nickInput.value);
+	console.log({ userExists });
 	const user = await createUser(nickInput.value);
 	console.log({ user });
 	// location.assign('/app/app.html');

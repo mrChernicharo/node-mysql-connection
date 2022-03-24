@@ -19,19 +19,22 @@ export class UsersController {
 		return rows[0] ?? null;
 	}
 
-	async getUserByNick({ nick }) {
+	async getUserByNick({ nickname }) {
 		const [rows, fields] = await db.execute(
-			`select * from users where nickname = ${nick};`
+			`select * from users where nickname = '${nickname}';`
 		);
 		return rows[0];
 	}
 
 	async createUser({ nickname }) {
+		const existingUser = await this.getUserByNick({ nickname });
+
+		if (existingUser) throw Error('nickname taken, please try another');
+
 		const [response] = await db.execute(
 			`insert into users (nickname, created_at) values 
             ('${nickname}', '${getCurrentTimestamp()}');`
 		);
-
 		const { insertId } = response;
 
 		const user = await this.getUserById({ id: insertId });

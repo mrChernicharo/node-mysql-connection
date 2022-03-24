@@ -5,9 +5,9 @@ const usersRoutes = new Router();
 
 usersRoutes.get('/nick', async (req, res) => {
 	try {
-		const { nick } = req.query;
-		console.log(nick);
-		const data = await usersController.getUserByNick({ nick });
+		const { nickname } = req.query;
+		console.log({ nickname, q: req.query });
+		const data = await usersController.getUserByNick({ nickname });
 
 		res.json(data).status(200);
 	} catch (err) {

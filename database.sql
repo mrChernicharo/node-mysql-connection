@@ -39,6 +39,15 @@ create table users_rooms(
 	constraint pk_users_rooms_id primary key (id)
 );
 
+create table contacts(
+	id int auto_increment,
+    fk_user_a int not null,
+    fk_user_b int not null,
+    
+    constraint pk_contact_id primary key (id)
+);
+
+
 
 /***********************
 	FOREIGN KEYS
@@ -57,6 +66,11 @@ alter table users_rooms add constraint fk_users_rooms_room
 foreign key (room_id) references rooms(id);
 
 
+alter table contacts add constraint fk_user_a_id 
+foreign key (fk_user_a) references users(id);
+
+alter table contacts add constraint fk_user_b_id 
+foreign key (fk_user_b) references users(id);
 
 /***********************
 
