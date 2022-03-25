@@ -1,5 +1,5 @@
-import { db } from '../db.mjs';
-import { getCurrentTimestamp } from '../utils/functions.mjs';
+import { db } from "../db.mjs";
+import { getCurrentTimestamp } from "../utils/functions.mjs";
 
 export class UsersController {
 	db;
@@ -8,13 +8,13 @@ export class UsersController {
 	}
 
 	async listAllUsers() {
-		const [rows, fields] = await db.execute('select * from users;');
+		const [rows, fields] = await db.execute("select * from users;");
 		return rows;
 	}
 
 	async getUserById({ id }) {
 		const [rows, fields] = await db.execute(
-			`select * from users where id = ${id};`
+			`select * from users where id = '${id}';`
 		);
 		return rows[0] ?? null;
 	}
@@ -29,7 +29,7 @@ export class UsersController {
 	async createUser({ nickname }) {
 		const existingUser = await this.getUserByNick({ nickname });
 
-		if (existingUser) throw Error('nickname taken, please try another');
+		if (existingUser) throw Error("nickname taken, please try another");
 
 		const [response] = await db.execute(
 			`insert into users (nickname, created_at) values 
@@ -69,6 +69,16 @@ export class UsersController {
 		const [rows, fields] = await db.execute(
 			`delete from users where id = ${id};`
 		);
+		return rows;
+	}
+
+	async getUserRooms({ userId }) {
+		const [rows, fields] = await db.execute(
+			`select * from users_rooms where user_id = ${userId}`
+		)
+
+		console.log('rows', rows)
+
 		return rows;
 	}
 }

@@ -18,6 +18,7 @@ roomsRoutes.get('/', async (req, res) => {
 	res.json(response);
 });
 
+
 roomsRoutes.post('/', async (req, res) => {
 	const { roomName } = req.body;
 

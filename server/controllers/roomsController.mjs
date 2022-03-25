@@ -27,9 +27,8 @@ export class RoomsController {
 		);
 
 		const { insertId } = response;
-		const room = this.getRoomById({ id: insertId });
+		const room = await this.getRoomById({ id: insertId });
 
-		console.log(room);
 		return room;
 	}
 

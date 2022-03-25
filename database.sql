@@ -1,9 +1,12 @@
 use chat_app;
 
+set foreign_key_checks = 0;
 
 /***********************
 	CREATE TABLES
 ************************/
+
+
 create table users(
 	id int auto_increment,
 	nickname varchar(100) not null,

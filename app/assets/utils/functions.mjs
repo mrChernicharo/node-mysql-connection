@@ -1,23 +1,4 @@
-// import { io } from "https://cdn.socket.io/4.4.1/socket.io.min.js";
-
 const appUser = {};
-const nickInput = document.querySelector('#nick-input');
-const form = document.querySelector('#nick-form');
-
-console.log(io, nickInput);
-
-form.addEventListener('submit', async e => {
-	e.preventDefault();
-	console.log(nickInput.value);
-
-	let user = await getUserByNick(nickInput.value);
-
-	if (!user) user = await createUser(nickInput.value);
-
-	setGlobalUser(user);
-
-	location.assign('/app/app.html');
-});
 
 async function getUsers() {
 	const res = await fetch('http://127.0.0.1:3333/users');
@@ -57,6 +38,13 @@ async function createUser(nickname) {
 	return data;
 }
 
+async function getUserRooms(id) {
+	const res = await fetch(`http://localhost:3333/users/rooms/${id}`);
+	const data = await res.json();
+	return data;
+}
+
+
 async function createRoom(roomName) {
 	const res = await fetch('http://localhost:3333/rooms', {
 		method: 'POST',
@@ -72,13 +60,15 @@ async function createRoom(roomName) {
 }
 
 function setGlobalUser(userData) {
+	console.log(userData);
+
 	Object.keys(userData).forEach(key => {
 		appUser[key] = userData[key];
 	});
 
 	localStorage.setItem('@user', JSON.stringify(userData));
 
-	console.log({ appUser, user });
+	console.log({ appUser, userData });
 }
 
-feather.replace();
+export { getUsers, getUserById, getUserByNick, createUser, setGlobalUser, createRoom, getUserRooms }

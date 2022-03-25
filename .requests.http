@@ -1,11 +1,13 @@
 
+## USERS ##
+########################################################
 # get user by id
-GET http://localhost:3333/users/24
+GET http://localhost:3333/users/2
 ###
 
 
 # get user by nickname
-GET http://127.0.0.1:3333/users/nick/?nickname=Mari
+GET http://127.0.0.1:3333/users/nick/?nickname=Tom%20Morello
 
 ###
 
@@ -19,27 +21,20 @@ GET http://localhost:3333/users/
 POST http://localhost:3333/users/
 content-type: application/json
 
-{
-	"nickname": "John Doe"
-}
+{"nickname": "John Doe"}
 ###
 
 # update user
-PUT http://localhost:3333/users/24
+PUT http://localhost:3333/users/4
 content-type: application/json
 
-{
-    "nickname": "john Doidão"
-}
-
+{"nickname": "john Doidão2"}
 ###
+
 PUT http://localhost:3333/users/24
 content-type: application/json
 
-{
-
-}
-
+{}
 ###
 
 DELETE http://localhost:3333/users/36
@@ -49,8 +44,8 @@ DELETE http://localhost:3333/users/36
 
 
 
-
-
+## ROOMS ##
+########################################################
 
 
 
@@ -62,15 +57,18 @@ GET http://localhost:3333/rooms
 ###
 
 
-
 POST http://localhost:3333/rooms
 content-type: application/json
 
-{
-    "roomName": "Template"
-}
+{"roomName": "Template23"}
 ###
 
 
 DELETE http://localhost:3333/rooms/7
 ###
+
+
+
+############
+
+GET http://localhost:3333/users/rooms/8
