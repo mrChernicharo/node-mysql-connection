@@ -27,9 +27,11 @@ export class RoomsController {
 		);
 
 		const { insertId } = response;
-		const room = await this.getRoomById({ id: insertId });
 
-		this.addUserToRoom(); //
+		console.log('received', userId);
+		await this.addUserToRoom({ userId, roomId: insertId }); //
+
+		const room = await this.getRoomById({ id: insertId });
 
 		return room;
 	}
@@ -37,7 +39,7 @@ export class RoomsController {
 	async addUserToRoom({ userId, roomId }) {
 		const [response] = await db.execute(
 			`insert into users_rooms (fk_user_id, fk_room_id, joined_at) values
-            ('${userId}',${roomId}',${getCurrentTimestamp()}');`
+            ('${userId}','${roomId}','${getCurrentTimestamp()}');`
 		);
 
 		console.log('added user to room', response);

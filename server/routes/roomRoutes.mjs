@@ -16,11 +16,20 @@ roomsRoutes.get('/', async (req, res) => {
 	res.json(response);
 });
 
+roomsRoutes.get('/users/:roomId', async (req, res) => {
+	const { roomId } = req.params;
+
+	const response = await roomsController.getRoomUsers({ roomId });
+
+	res.json(response);
+});
+
 roomsRoutes.post('/', async (req, res) => {
 	const { roomName, userId } = req.body;
 
+	console.log('received roomName:', roomName, ' and userId: ', userId);
+
 	const response = await roomsController.createRoom({ roomName, userId });
-	// const data = await response.json();
 
 	console.log('created room', response);
 	res.json(response);

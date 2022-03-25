@@ -23,6 +23,7 @@ export class UsersController {
 		const [rows, fields] = await db.execute(
 			`select * from users where nickname = '${nickname}';`
 		);
+		console.log(rows);
 		return rows[0] ?? null;
 	}
 
