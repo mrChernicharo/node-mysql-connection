@@ -57,10 +57,10 @@ GET http://localhost:3333/rooms
 ###
 
 
-POST http://localhost:3333/rooms
+POST http://localhost:3333/rooms/user
 content-type: application/json
 
-{"roomName": "Template23"}
+{"roomName": "Template23", "userId": "1"}
 ###
 
 
@@ -71,4 +71,4 @@ DELETE http://localhost:3333/rooms/7
 
 ############
 
-GET http://localhost:3333/users/rooms/8
+GET http://localhost:3333/users/rooms/1

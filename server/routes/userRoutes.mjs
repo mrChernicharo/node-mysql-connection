@@ -49,19 +49,16 @@ usersRoutes.post('/', async (req, res) => {
 
 usersRoutes.get('/rooms/:userId', async (req, res) => {
 	try {
-		const { userId } = req.params
-		console.log(userId)
-		const rooms = await usersController.getUserRooms({ userId })
+		const { userId } = req.params;
+		console.log('received ', userId);
 
-		res.json(rooms);
-	} catch (err) {
+		const rooms = await usersController.getUserRooms({ userId });
 
-	}
-})
-
+		res.json(rooms).status(200);
+	} catch (err) {}
+});
 
 export { usersRoutes };
-
 
 usersRoutes.delete('/:id', async (req, res) => {
 	try {
@@ -86,6 +83,3 @@ usersRoutes.put('/:id', async (req, res) => {
 		console.error(err);
 	}
 });
-
-
-

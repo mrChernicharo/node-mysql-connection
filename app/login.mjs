@@ -1,6 +1,10 @@
 // import { io } from "https://cdn.socket.io/4.4.1/socket.io.min.js";
-
-import { setGlobalUser, createUser, getUserByNick, createRoom } from "./assets/utils/functions.mjs";
+import {
+	setGlobalUser,
+	createUser,
+	getUserByNick,
+	createRoom,
+} from './assets/utils/functions.mjs';
 
 const nickInput = document.querySelector('#nick-input');
 const form = document.querySelector('#nick-form');
@@ -16,15 +20,15 @@ form.addEventListener('submit', async e => {
 	if (!user) {
 		user = await createUser(nickInput.value);
 
-		const roomName = nickInput.value + " space"
+		const roomName = nickInput.value + ' space';
 		const room = await createRoom(roomName);
 		console.log('room', room);
-	};
+	}
 
 	setGlobalUser(user);
 
-	location.assign('/app/app.html');
+	console.log('...redirecting');
+	// setTimeout(() => location.assign('/app/app.html'), 10000);
 });
-
 
 feather.replace();

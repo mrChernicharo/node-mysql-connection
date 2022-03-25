@@ -1,5 +1,5 @@
-import { db } from "../db.mjs";
-import { getCurrentTimestamp } from "../utils/functions.mjs";
+import { db } from '../db.mjs';
+import { getCurrentTimestamp } from '../utils/functions.mjs';
 
 export class UsersController {
 	db;
@@ -8,7 +8,7 @@ export class UsersController {
 	}
 
 	async listAllUsers() {
-		const [rows, fields] = await db.execute("select * from users;");
+		const [rows, fields] = await db.execute('select * from users;');
 		return rows;
 	}
 
@@ -29,7 +29,7 @@ export class UsersController {
 	async createUser({ nickname }) {
 		const existingUser = await this.getUserByNick({ nickname });
 
-		if (existingUser) throw Error("nickname taken, please try another");
+		if (existingUser) throw Error('nickname taken, please try another');
 
 		const [response] = await db.execute(
 			`insert into users (nickname, created_at) values 
@@ -64,8 +64,6 @@ export class UsersController {
 	}
 
 	async deleteUser({ id }) {
-		console.log(id);
-		// return id;
 		const [rows, fields] = await db.execute(
 			`delete from users where id = ${id};`
 		);
@@ -73,13 +71,18 @@ export class UsersController {
 	}
 
 	async getUserRooms({ userId }) {
-		const [rows, fields] = await db.execute(
-			`select * from users_rooms where user_id = ${userId}`
-		)
+		const [response] = await db.execute(
+			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` from users_rooms as ur
+            left join users as u
+            on u.id = ur.fk_user_id
+            left join rooms as r
+            on r.id = ur.fk_room_id
+            where u.id = ${userId};`
+		);
 
-		console.log('rows', rows)
+		console.log('gotten user rooms', response);
 
-		return rows;
+		return response;
 	}
 }
 
