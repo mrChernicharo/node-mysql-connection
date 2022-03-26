@@ -249,6 +249,14 @@ order by `user`;
 
 
 
+select ur.id as item, r.id as room_id, r.`name` as room, u.id as user_id, u.nickname as `user` 
+from user_room as ur
+left join user as u
+on u.id = ur.fk_user_id
+left join room as r
+on r.id = ur.fk_room_id
+where u.id = 1;
+
 
 -- kill stuff
 

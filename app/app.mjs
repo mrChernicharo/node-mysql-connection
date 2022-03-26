@@ -1,4 +1,4 @@
-import { fetchRoomsByUser } from './assets/utils/functions.mjs';
+import { fetchRoomsByUser } from './utils/functions.mjs';
 
 const user = JSON.parse(localStorage.getItem('@user'));
 
@@ -17,3 +17,5 @@ rooms.forEach(room => {
 	li.textContent = room.room;
 	roomsList.appendChild(li);
 });
+
+feather.replace();

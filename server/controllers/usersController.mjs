@@ -8,20 +8,20 @@ export class UsersController {
 	}
 
 	async listAllUsers() {
-		const [rows, fields] = await db.execute('select * from users;');
+		const [rows, fields] = await db.execute('select * from user;');
 		return rows;
 	}
 
 	async getUserById({ id }) {
 		const [rows, fields] = await db.execute(
-			`select * from users where id = '${id}';`
+			`select * from user where id = '${id}';`
 		);
 		return rows[0] ?? null;
 	}
 
 	async getUserByNick({ nickname }) {
 		const [rows, fields] = await db.execute(
-			`select * from users where nickname = '${nickname}';`
+			`select * from user where nickname = '${nickname}';`
 		);
 		console.log(rows);
 		return rows[0] ?? null;
@@ -33,7 +33,7 @@ export class UsersController {
 		if (existingUser) throw Error('nickname taken, please try another');
 
 		const [response] = await db.execute(
-			`insert into users (nickname, created_at) values 
+			`insert into user (nickname, created_at) values 
             ('${nickname}', '${getCurrentTimestamp()}');`
 		);
 		const { insertId } = response;
@@ -53,7 +53,7 @@ export class UsersController {
 
 			if (!instructions.length) return await this.getUserById({ id });
 
-			const query = `update users set ${instructions} where id = ${id}`;
+			const query = `update user set ${instructions} where id = ${id}`;
 			await db.execute(query);
 
 			const user = await this.getUserById({ id });
@@ -66,17 +66,19 @@ export class UsersController {
 
 	async deleteUser({ id }) {
 		const [rows, fields] = await db.execute(
-			`delete from users where id = ${id};`
+			`delete from user where id = ${id};`
 		);
 		return rows;
 	}
 
 	async getUserRooms({ userId }) {
+		console.log('getting with id ' + userId);
 		const [response] = await db.execute(
-			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` from users_rooms as ur
-            left join users as u
+			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` 
+			from user_room as ur
+            left join user as u
             on u.id = ur.fk_user_id
-            left join rooms as r
+            left join room as r
             on r.id = ur.fk_room_id
             where u.id = ${userId};`
 		);

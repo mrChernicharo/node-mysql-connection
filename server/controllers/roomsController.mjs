@@ -9,21 +9,21 @@ export class RoomsController {
 
 	async getRoomById({ id }) {
 		const [rows, fields] = await db.execute(
-			`select * from rooms where id = ${id};`
+			`select * from room where id = ${id};`
 		);
 		console.log(rows);
 		return rows[0] ?? null;
 	}
 
 	async listAllRooms() {
-		const [rows, fields] = await db.execute(`select * from rooms`);
+		const [rows, fields] = await db.execute(`select * from room`);
 
 		return rows;
 	}
 
 	async createRoom({ roomName, userId }) {
 		const [response] = await db.execute(
-			`insert into rooms (name, created_at) values ('${roomName}', '${getCurrentTimestamp()}')`
+			`insert into room (name, created_at) values ('${roomName}', '${getCurrentTimestamp()}')`
 		);
 
 		const { insertId } = response;
@@ -38,7 +38,7 @@ export class RoomsController {
 
 	async addUserToRoom({ userId, roomId }) {
 		const [response] = await db.execute(
-			`insert into users_rooms (fk_user_id, fk_room_id, joined_at) values
+			`insert into user_room (fk_user_id, fk_room_id, joined_at) values
             ('${userId}','${roomId}','${getCurrentTimestamp()}');`
 		);
 
@@ -49,9 +49,10 @@ export class RoomsController {
 
 	async getRoomUsers({ roomId }) {
 		const [response] = await db.execute(
-			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` from users_rooms as ur
-            left join users as u on u.id = ur.fk_user_id
-            left join rooms as r on r.id = ur.fk_room_id
+			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` 
+			from user_room as ur
+            left join user as u on u.id = ur.fk_user_id
+            left join room as r on r.id = ur.fk_room_id
             where r.id = ${roomId};`
 		);
 
@@ -63,7 +64,7 @@ export class RoomsController {
 	async deleteRoom({ id }) {
 		const room = this.getRoomById({ id });
 
-		await db.execute(`delete from rooms where id = '${id}';`);
+		await db.execute(`delete from room where id = '${id}';`);
 
 		return room;
 	}

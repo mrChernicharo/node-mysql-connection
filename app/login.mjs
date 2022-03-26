@@ -4,7 +4,7 @@ import {
 	createUser,
 	fetchUserByNick,
 	createRoom,
-} from './assets/utils/functions.mjs';
+} from './utils/functions.mjs';
 
 const nickInput = document.querySelector('#nick-input');
 const form = document.querySelector('#nick-form');
@@ -16,6 +16,7 @@ form.addEventListener('submit', async e => {
 	console.log(nickInput.value);
 
 	let user = await fetchUserByNick(nickInput.value);
+	console.log(user ? 'known user' : 'new user');
 
 	if (!user) {
 		user = await createUser(nickInput.value);
@@ -24,14 +25,12 @@ form.addEventListener('submit', async e => {
 		const roomName = user.nickname + ' space';
 		const room = await createRoom(user.id, roomName);
 		console.log('created room', { room });
-	} else {
-		console.log('known user logging in...', { user });
 	}
 
 	setGlobalUser(user);
 
 	console.log('...redirecting');
-	setTimeout(() => location.assign('/app/app.html'), 2500);
+	setTimeout(() => location.assign('/app/app.html'), 3200);
 });
 
 feather.replace();

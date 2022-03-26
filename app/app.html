@@ -3,20 +3,25 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=input, initial-scale=1.0" />
-		<script src="https://unpkg.com/feather-icons"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="shortcut icon" href="./assets/js.svg" type="image/x-icon" />
-		<title>Chat App 2</title>
+		<script src="https://unpkg.com/feather-icons"></script>
+
+		<title>Chat App</title>
 	</head>
 	<body>
 		<header>
 			<h2>Chat-app</h2>
+			<i data-feather="sun"></i>
+
 			<h3 id="nick-display"></h3>
 		</header>
 
 		<ul id="rooms-list"></ul>
 
+		<label for="message-input">Message</label>
 		<input type="text" id="message-input" />
+
 		<script type="module" src="./app.mjs"></script>
 	</body>
 </html>
