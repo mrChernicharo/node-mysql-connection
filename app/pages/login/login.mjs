@@ -4,7 +4,7 @@ import {
 	createUser,
 	fetchUserByNick,
 	createRoom,
-} from './utils/functions.mjs';
+} from '../../utils/functions.mjs';
 
 const nickInput = document.querySelector('#nick-input');
 const form = document.querySelector('#nick-form');
@@ -30,7 +30,7 @@ form.addEventListener('submit', async e => {
 	setGlobalUser(user);
 
 	console.log('...redirecting');
-	setTimeout(() => location.assign('/app/app.html'), 3200);
+	setTimeout(() => location.assign('/app/pages/main/'), 2000);
 });
 
 feather.replace();
