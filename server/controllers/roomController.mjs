@@ -1,17 +1,19 @@
-import { db } from '../db.mjs';
+import { db, dbEvents } from '../db.mjs';
 import { getCurrentTimestamp } from '../utils/functions.mjs';
 
-export class RoomsController {
+export class RoomController {
 	db;
-	constructor(db) {
+	dbEvents;
+	constructor(db, dbEvents) {
 		this.db = db;
+		this.dbEvents = dbEvents;
 	}
 
 	async getRoomById({ id }) {
 		const [rows, fields] = await db.execute(
 			`select * from room where id = ${id};`
 		);
-		console.log(rows);
+		// console.log(rows);
 		return rows[0] ?? null;
 	}
 
@@ -28,23 +30,13 @@ export class RoomsController {
 
 		const { insertId } = response;
 
-		console.log('received', userId);
-		await this.addUserToRoom({ userId, roomId: insertId }); //
+		// console.log('received', userId);
+		// await this.addUserToRoom({ userId, roomId: insertId }); //
+		this.dbEvents.emit('addUserToRoom', { userId, roomId: insertId });
 
 		const room = await this.getRoomById({ id: insertId });
 
 		return room;
-	}
-
-	async addUserToRoom({ userId, roomId }) {
-		const [response] = await db.execute(
-			`insert into user_room (fk_user_id, fk_room_id, joined_at) values
-            ('${userId}','${roomId}','${getCurrentTimestamp()}');`
-		);
-
-		console.log('added user to room', response);
-
-		return response;
 	}
 
 	async getRoomUsers({ roomId }) {
@@ -56,7 +48,7 @@ export class RoomsController {
             where r.id = ${roomId};`
 		);
 
-		console.log('getting all users from room ' + roomId, response);
+		// console.log('getting all users from room ' + roomId, response);
 
 		return response;
 	}
@@ -70,6 +62,6 @@ export class RoomsController {
 	}
 }
 
-const roomsController = new RoomsController(db);
+const roomController = new RoomController(db, dbEvents);
 
-export { roomsController };
+export { roomController };

@@ -1,14 +1,14 @@
 const appUser = {};
 
 async function fetchUsers() {
-	const res = await fetch('http://localhost:3333/users');
+	const res = await fetch('http://localhost:3333/user');
 	const data = await res.json();
 
 	return data;
 }
 
 async function fetchUserById(id) {
-	const res = await fetch(`http://localhost:3333/users/${id}`);
+	const res = await fetch(`http://localhost:3333/user/${id}`);
 	const data = await res.json();
 
 	return data;
@@ -16,7 +16,7 @@ async function fetchUserById(id) {
 
 async function fetchUserByNick(nickname) {
 	const res = await fetch(
-		`http://localhost:3333/users/nick?nickname=${nickname}`
+		`http://localhost:3333/user/nick?nickname=${nickname}`
 	);
 	const data = await res.json();
 	console.log({ data });
@@ -24,20 +24,8 @@ async function fetchUserByNick(nickname) {
 	return data;
 }
 
-async function fetchRoomsByUser(userId) {
-	const res = await fetch(`http://localhost:3333/users/rooms/${userId}`);
-	const data = await res.json();
-	return data;
-}
-
-async function fetchUsersByRoom(roomId) {
-	const res = await fetch(`http://localhost:3333/rooms/users/${roomId}`);
-	const data = await res.json();
-	return data;
-}
-
 async function createUser(nickname) {
-	const res = await fetch('http://localhost:3333/users', {
+	const res = await fetch('http://localhost:3333/user', {
 		method: 'POST',
 		body: JSON.stringify({
 			nickname,
@@ -51,7 +39,7 @@ async function createUser(nickname) {
 }
 
 async function createRoom(userId, roomName) {
-	const res = await fetch('http://localhost:3333/rooms', {
+	const res = await fetch('http://localhost:3333/room', {
 		method: 'POST',
 		body: JSON.stringify({
 			roomName,
@@ -62,6 +50,25 @@ async function createRoom(userId, roomName) {
 
 	const data = await res.json();
 
+	return data;
+}
+
+async function fetchRoomsByUser(userId) {
+	const res = await fetch(`http://localhost:3333/user-room/rooms/${userId}`);
+	const data = await res.json();
+	return data;
+}
+
+async function fetchUsersByRoom(roomId) {
+	const res = await fetch(`http://localhost:3333/user-room/users/${roomId}`);
+	const data = await res.json();
+	return data;
+}
+
+async function fetchUserContacts(userId) {
+	const res = await fetch(`http://localhost:3333/contact?userId=${userId}`);
+	const data = await res.json();
+	console.log('contacts', { data });
 	return data;
 }
 
@@ -84,6 +91,7 @@ export {
 	fetchRoomsByUser,
 	fetchUsersByRoom,
 	createUser,
-	setGlobalUser,
 	createRoom,
+	fetchUserContacts,
+	setGlobalUser,
 };

@@ -257,6 +257,19 @@ left join room as r
 on r.id = ur.fk_room_id
 where u.id = 1;
 
+-- get all contacts from user x
+select distinct 
+	c.id as contact, 
+	c.fk_user_a as id_a,
+	(select nickname from `user` where id = c.fk_user_a) as A, 
+	c.fk_user_b as id_b, 
+	(select nickname from `user` where id =  c.fk_user_b) as B 
+from 
+	contact as c left join `user` as u 
+on 
+	c.fk_user_a = u.id or c.fk_user_b = u.id
+where 
+	c.fk_user_a = 7 or c.fk_user_b = 7;
 
 -- kill stuff
 

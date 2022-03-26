@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { usersController } from '../controllers/usersController.mjs';
+import { userController } from '../controllers/userController.mjs';
 
-const usersRoutes = new Router();
+const userRoutes = new Router();
 
-usersRoutes.get('/nick', async (req, res) => {
+userRoutes.get('/nick', async (req, res) => {
 	try {
 		const { nickname } = req.query;
-		const data = await usersController.getUserByNick({ nickname });
+		const data = await userController.getUserByNick({ nickname });
 
 		res.json(data).status(200);
 	} catch (err) {
@@ -14,10 +14,10 @@ usersRoutes.get('/nick', async (req, res) => {
 	}
 });
 
-usersRoutes.get('/:id', async (req, res) => {
+userRoutes.get('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
-		const data = await usersController.getUserById({ id });
+		const data = await userController.getUserById({ id });
 
 		res.json(data).status(200);
 	} catch (err) {
@@ -25,20 +25,20 @@ usersRoutes.get('/:id', async (req, res) => {
 	}
 });
 
-usersRoutes.get('/', async (req, res) => {
+userRoutes.get('/', async (req, res) => {
 	try {
-		const data = await usersController.listAllUsers();
+		const data = await userController.listAllUsers();
 		res.json(data).status(200);
 	} catch (err) {
 		console.error(err);
 	}
 });
 
-usersRoutes.post('/', async (req, res) => {
+userRoutes.post('/', async (req, res) => {
 	try {
 		const { nickname } = req.body;
 		console.log(req.body);
-		const data = await usersController.createUser({ nickname });
+		const data = await userController.createUser({ nickname });
 		console.log(data);
 
 		res.json(data).status(201);
@@ -47,23 +47,23 @@ usersRoutes.post('/', async (req, res) => {
 	}
 });
 
-usersRoutes.get('/rooms/:userId', async (req, res) => {
-	try {
-		const { userId } = req.params;
-		console.log('received ', userId);
+// userRoutes.get('/rooms/:userId', async (req, res) => {
+// 	try {
+// 		const { userId } = req.params;
+// 		console.log('received ', userId);
 
-		const rooms = await usersController.getUserRooms({ userId });
+// 		const rooms = await userController.getUserRooms({ userId });
 
-		res.json(rooms).status(200);
-	} catch (err) {}
-});
+// 		res.json(rooms).status(200);
+// 	} catch (err) {}
+// });
 
-export { usersRoutes };
+export { userRoutes };
 
-usersRoutes.delete('/:id', async (req, res) => {
+userRoutes.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
-		const data = await usersController.deleteUser({ id });
+		const data = await userController.deleteUser({ id });
 
 		res.json(data).status(201);
 	} catch (err) {
@@ -71,12 +71,12 @@ usersRoutes.delete('/:id', async (req, res) => {
 	}
 });
 
-usersRoutes.put('/:id', async (req, res) => {
+userRoutes.put('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
 		const { nickname = '' } = req.body;
 
-		const data = await usersController.updateUser({ id, nickname });
+		const data = await userController.updateUser({ id, nickname });
 
 		res.json(data).status(201);
 	} catch (err) {

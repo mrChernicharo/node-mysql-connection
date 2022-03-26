@@ -1,4 +1,4 @@
-import { fetchRoomsByUser } from '../../utils/functions.mjs';
+import { fetchRoomsByUser, fetchUserContacts } from '../../utils/functions.mjs';
 
 const user = JSON.parse(localStorage.getItem('@user'));
 
@@ -21,10 +21,10 @@ rooms.forEach(room => {
 	roomsList.appendChild(li);
 });
 
-contactsList.forEach(contact => {
+contacts.forEach(contact => {
 	const li = document.createElement('li');
-	li.textContent = 'contact';
-	roomsList.appendChild(li);
+	li.textContent = [contact.A, contact.B].filter(c => c !== user.nickname);
+	contactsList.appendChild(li);
 });
 
 feather.replace();

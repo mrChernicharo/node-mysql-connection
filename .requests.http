@@ -74,10 +74,16 @@ DELETE http://localhost:3333/rooms/7
 
 # get all rooms from user x
 # fetchRoomsByUser
-GET http://localhost:3333/users/rooms/17
+GET http://localhost:3333/user-room/rooms/1
 
 ###
 
 # get all users from room x
-GET http://localhost:3333/rooms/users/2
+GET http://localhost:3333/user-room/users/2
+###
+
+
+# get all contacts from user x
+GET http://localhost:3333/contact?userId=6
+
 ###

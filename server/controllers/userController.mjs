@@ -1,7 +1,7 @@
 import { db } from '../db.mjs';
 import { getCurrentTimestamp } from '../utils/functions.mjs';
 
-export class UsersController {
+export class UserController {
 	db;
 	constructor(db) {
 		this.db = db;
@@ -89,6 +89,6 @@ export class UsersController {
 	}
 }
 
-const usersController = new UsersController(db);
+const userController = new UserController(db);
 
-export { usersController };
+export { userController };

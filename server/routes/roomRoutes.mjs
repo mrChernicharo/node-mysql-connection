@@ -1,45 +1,45 @@
 import { Router } from 'express';
-import { roomsController } from '../controllers/roomsController.mjs';
+import { roomController } from '../controllers/roomController.mjs';
 
-const roomsRoutes = new Router();
+const roomRoutes = new Router();
 
-roomsRoutes.get('/:id', async (req, res) => {
+roomRoutes.get('/:id', async (req, res) => {
 	const { id } = req.params;
 
-	const response = await roomsController.getRoomById({ id });
+	const response = await roomController.getRoomById({ id });
 	res.json(response);
 });
 
-roomsRoutes.get('/', async (req, res) => {
-	const response = await roomsController.listAllRooms();
-
-	res.json(response);
-});
-
-roomsRoutes.get('/users/:roomId', async (req, res) => {
-	const { roomId } = req.params;
-
-	const response = await roomsController.getRoomUsers({ roomId });
+roomRoutes.get('/', async (req, res) => {
+	const response = await roomController.listAllRooms();
 
 	res.json(response);
 });
 
-roomsRoutes.post('/', async (req, res) => {
+// roomRoutes.get('/users/:roomId', async (req, res) => {
+// 	const { roomId } = req.params;
+
+// 	const response = await roomController.getRoomUsers({ roomId });
+
+// 	res.json(response);
+// });
+
+roomRoutes.post('/', async (req, res) => {
 	const { roomName, userId } = req.body;
 
 	console.log('received roomName:', roomName, ' and userId: ', userId);
 
-	const response = await roomsController.createRoom({ roomName, userId });
+	const response = await roomController.createRoom({ roomName, userId });
 
 	console.log('created room', response);
 	res.json(response);
 });
 
-roomsRoutes.delete('/:id', async (req, res) => {
+roomRoutes.delete('/:id', async (req, res) => {
 	const { id } = req.params;
 
-	const response = await roomsController.deleteRoom({ id });
+	const response = await roomController.deleteRoom({ id });
 	res.json(response);
 });
 
-export { roomsRoutes };
+export { roomRoutes };
