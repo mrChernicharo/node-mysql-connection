@@ -19,11 +19,13 @@ form.addEventListener('submit', async e => {
 
 	if (!user) {
 		user = await createUser(nickInput.value);
-		console.log('created user', user);
+		console.log('created user', { user });
 
 		const roomName = user.nickname + ' space';
 		const room = await createRoom(user.id, roomName);
-		console.log('created room', room);
+		console.log('created room', { room });
+	} else {
+		console.log('known user logging in...', { user });
 	}
 
 	setGlobalUser(user);
