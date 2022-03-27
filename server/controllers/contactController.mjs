@@ -22,8 +22,27 @@ export class ContactController {
 			where 
 				c.fk_user_a = '${userId}' or c.fk_user_b = '${userId}';
 		`);
-		console.log('contacts', rows);
+		// console.log('contacts', rows);
 		return rows || null;
+	}
+
+	async createContact({ userId, contactId }) {
+		const [result] = await this.db.execute(
+			`insert into contact (fk_user_a, fk_user_b) values ('${userId}', '${contactId}');`
+		);
+		const { insertId } = result;
+
+		const [rows, fields] = await this.db.execute(
+			`select fk_user_a as A, fk_user_b as B from contact where id = ${insertId};`
+		);
+
+		const { A, B } = rows[0];
+
+		const [contact] = await this.db.execute(
+			`select nickname from user where id = '${B}';`
+		);
+
+		return contact[0];
 	}
 }
 

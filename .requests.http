@@ -87,3 +87,14 @@ GET http://localhost:3333/user-room/users/2
 GET http://localhost:3333/contact?userId=6
 
 ###
+
+
+POST http://localhost:3333/contact
+content-type: application/json
+
+{
+    "userId": 6,
+    "contactId": 5 
+}
+
+###

@@ -72,6 +72,19 @@ async function fetchUserContacts(userId) {
 	return data;
 }
 
+async function createContact(userId, contactId) {
+	const res = await fetch(`http://localhost:3333/contact`, {
+		method: 'POST',
+		body: JSON.stringify({
+			userId,
+			contactId,
+		}),
+		headers: [['Content-Type', 'application/json']],
+	});
+	const data = await res.json();
+	return data;
+}
+
 function setGlobalUser(userData) {
 	console.log(userData);
 
@@ -90,8 +103,9 @@ export {
 	fetchUserByNick,
 	fetchRoomsByUser,
 	fetchUsersByRoom,
+	fetchUserContacts,
 	createUser,
 	createRoom,
-	fetchUserContacts,
+	createContact,
 	setGlobalUser,
 };

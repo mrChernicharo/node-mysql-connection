@@ -3,9 +3,9 @@ import dotenv from 'dotenv';
 import { EventEmitter } from 'events';
 dotenv.config();
 
-console.log(process.env.MYSQL_PASSWORD);
-console.log(process.env.MYSQL_USER);
-console.log(process.env.MYSQL_DATABASE);
+// console.log(process.env.MYSQL_PASSWORD);
+// console.log(process.env.MYSQL_USER);
+// console.log(process.env.MYSQL_DATABASE);
 
 const dbEvents = new EventEmitter();
 

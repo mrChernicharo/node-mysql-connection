@@ -10,4 +10,16 @@ contactRoutes.get('/', async (req, res) => {
 	res.json(contacts).status(200);
 });
 
+contactRoutes.post('/', async (req, res) => {
+	const { userId, contactId } = req.body;
+	console.log({ userId, contactId });
+
+	const contact = await contactController.createContact({
+		userId,
+		contactId,
+	});
+
+	res.json(contact).status(200);
+});
+
 export { contactRoutes };

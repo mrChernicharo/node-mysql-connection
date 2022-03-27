@@ -1,0 +1,7 @@
+#contacts-modal {
+	border: 1px solid;
+}
+
+#contacts-modal.closed {
+	display: none;
+}

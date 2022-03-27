@@ -8,7 +8,7 @@ export class UserRoomController {
 		this.db = db;
 		this.dbEvents = dbEvents;
 		this.dbEvents.on('addUserToRoom', data => {
-			console.log('just heard addUserToRoom', { data });
+			// console.log('just heard addUserToRoom', { data });
 			this.addUserToRoom(data);
 		});
 	}
@@ -25,7 +25,7 @@ export class UserRoomController {
             where u.id = ${userId};`
 		);
 
-		console.log('gotten user rooms', response);
+		// console.log('gotten user rooms', response);
 
 		return response;
 	}
@@ -39,7 +39,7 @@ export class UserRoomController {
             where r.id = ${roomId};`
 		);
 
-		console.log('getting all users from room ' + roomId, response);
+		// console.log('getting all users from room ' + roomId, response);
 
 		return response;
 	}
