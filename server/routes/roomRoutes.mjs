@@ -25,11 +25,11 @@ roomRoutes.get('/', async (req, res) => {
 // });
 
 roomRoutes.post('/', async (req, res) => {
-	const { roomName, userId } = req.body;
+	const { roomName, userId, contacts } = req.body;
 
-	console.log('received roomName:', roomName, ' and userId: ', userId);
+	console.log('received roomName:', roomName, ' and userId: ', userId, ' other people in the room: ', contacts);
 
-	const response = await roomController.createRoom({ roomName, userId });
+	const response = await roomController.createRoom({ roomName, userId, contacts });
 
 	console.log('created room', response);
 	res.json(response);

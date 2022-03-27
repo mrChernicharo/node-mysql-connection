@@ -23,7 +23,7 @@ form.addEventListener('submit', async e => {
 		console.log('created user', { user });
 
 		const roomName = user.nickname + ' space';
-		const room = await createRoom(user.id, roomName);
+		const room = await createRoom(user.id, roomName, null);
 		console.log('created room', { room });
 	}
 

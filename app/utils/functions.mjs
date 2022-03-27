@@ -38,12 +38,13 @@ async function createUser(nickname) {
 	return data;
 }
 
-async function createRoom(userId, roomName) {
+async function createRoom(userId, roomName, contacts) {
 	const res = await fetch('http://localhost:3333/room', {
 		method: 'POST',
 		body: JSON.stringify({
 			roomName,
 			userId,
+			contacts
 		}),
 		headers: [['Content-Type', 'application/json']],
 	});

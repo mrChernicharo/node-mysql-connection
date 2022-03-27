@@ -47,19 +47,6 @@ userRoutes.post('/', async (req, res) => {
 	}
 });
 
-// userRoutes.get('/rooms/:userId', async (req, res) => {
-// 	try {
-// 		const { userId } = req.params;
-// 		console.log('received ', userId);
-
-// 		const rooms = await userController.getUserRooms({ userId });
-
-// 		res.json(rooms).status(200);
-// 	} catch (err) {}
-// });
-
-export { userRoutes };
-
 userRoutes.delete('/:id', async (req, res) => {
 	try {
 		const { id } = req.params;
@@ -83,3 +70,5 @@ userRoutes.put('/:id', async (req, res) => {
 		console.error(err);
 	}
 });
+
+export { userRoutes };

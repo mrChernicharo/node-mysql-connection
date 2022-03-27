@@ -1,70 +1,70 @@
 
-## USERS ##
+## USER ##
 ########################################################
 # get user by id
-GET http://localhost:3333/users/2
+GET http://localhost:3333/user/2
 ###
 
 
 # get user by nickname
-GET http://127.0.0.1:3333/users/nick/?nickname=Tom%20Morello
+GET http://127.0.0.1:3333/user/nick/?nickname=Tom%20Morello
 
 ###
 
 
 # get all users
-GET http://localhost:3333/users/
+GET http://localhost:3333/user/
 ###
 
 
 # create new user
-POST http://localhost:3333/users/
+POST http://localhost:3333/user
 content-type: application/json
 
 {"nickname": "John Doe"}
 ###
 
 # update user
-PUT http://localhost:3333/users/4
+PUT http://localhost:3333/user/4
 content-type: application/json
 
 {"nickname": "john Doidão2"}
 ###
 
-PUT http://localhost:3333/users/24
+PUT http://localhost:3333/user/24
 content-type: application/json
 
 {}
 ###
 
-DELETE http://localhost:3333/users/36
+DELETE http://localhost:3333/user/36
 ###
 
 
 
 
 
-## ROOMS ##
+## ROOM ##
 ########################################################
 
 
 
-GET http://localhost:3333/rooms/5
+GET http://localhost:3333/room/5
 ###
 
 
-GET http://localhost:3333/rooms
+GET http://localhost:3333/room
 ###
 
 
-POST http://localhost:3333/rooms/user
+POST http://localhost:3333/room
 content-type: application/json
 
-{"roomName": "Template23", "userId": "1"}
+{"roomName": "TesteG", "userId": "4", "contacts": [ { "id": 2 }, { "id":1 } ] }
 ###
 
 
-DELETE http://localhost:3333/rooms/7
+DELETE http://localhost:3333/room/7
 ###
 
 
@@ -72,13 +72,13 @@ DELETE http://localhost:3333/rooms/7
 ############
 
 
-# get all rooms from user x
-# fetchRoomsByUser
+# get all room from user x
+# fetchRoomByUser
 GET http://localhost:3333/user-room/rooms/1
 
 ###
 
-# get all users from room x
+# get all user from room x
 GET http://localhost:3333/user-room/users/2
 ###
 
@@ -93,8 +93,8 @@ POST http://localhost:3333/contact
 content-type: application/json
 
 {
-    "userId": 10,
-    "contactId": 1
+    "userId": 5,
+    "contactId": 4 
 }
 
 ###

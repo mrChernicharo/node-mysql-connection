@@ -23,16 +23,20 @@ export class RoomController {
 		return rows;
 	}
 
-	async createRoom({ roomName, userId }) {
+	async createRoom({ roomName, userId, contacts }) {
 		const [response] = await db.execute(
 			`insert into room (name, created_at) values ('${roomName}', '${getCurrentTimestamp()}')`
 		);
 
 		const { insertId } = response;
 
-		// console.log('received', userId);
-		// await this.addUserToRoom({ userId, roomId: insertId }); //
 		this.dbEvents.emit('addUserToRoom', { userId, roomId: insertId });
+
+		if (contacts) {
+			contacts.forEach(contact => {
+				this.dbEvents.emit('addUserToRoom', { userId: contact.id, roomId: insertId });
+			})
+		}
 
 		const room = await this.getRoomById({ id: insertId });
 
@@ -60,6 +64,7 @@ export class RoomController {
 
 		return room;
 	}
+
 }
 
 const roomController = new RoomController(db, dbEvents);
