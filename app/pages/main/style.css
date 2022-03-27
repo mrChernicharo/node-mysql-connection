@@ -5,3 +5,7 @@
 #contacts-modal.closed {
 	display: none;
 }
+
+#rooms-list li {
+	border: 1px solid;
+}

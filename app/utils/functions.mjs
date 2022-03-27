@@ -85,6 +85,31 @@ async function createContact(userId, contactId) {
 	return data;
 }
 
+async function fetchRoomMessages(roomId) {
+	console.log({ roomId });
+	const res = await fetch(`http://localhost:3333/message/${roomId}`);
+	const data = await res.json();
+
+	return data;
+}
+
+/**
+ *   Room {
+ * 		id,
+ * 		name,
+ *  	users: [
+ * 			{ id, nickname }, { id, nickname }
+ * 		],
+ * 		messages: [
+ * 			{ id, user, text }
+ * 		]
+ *   }
+ *
+ * 	room: id, name
+ * 	user_room: user_id
+ *  messages: *
+ */
+
 function setGlobalUser(userData) {
 	console.log(userData);
 
@@ -104,6 +129,7 @@ export {
 	fetchRoomsByUser,
 	fetchUsersByRoom,
 	fetchUserContacts,
+	fetchRoomMessages,
 	createUser,
 	createRoom,
 	createContact,

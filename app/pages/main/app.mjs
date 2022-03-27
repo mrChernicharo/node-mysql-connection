@@ -2,6 +2,8 @@ import {
 	fetchRoomsByUser,
 	fetchUserContacts,
 	fetchUserByNick,
+	fetchUsersByRoom,
+	fetchRoomMessages,
 	createContact,
 } from '../../utils/functions.mjs';
 
@@ -24,7 +26,8 @@ console.log('contacts', contacts);
 
 rooms.forEach(room => {
 	const li = document.createElement('li');
-	li.textContent = room.room;
+	li.textContent = room.name;
+	li.addEventListener('click', () => enterRoom(room));
 	roomsList.appendChild(li);
 });
 
@@ -53,6 +56,7 @@ contactForm.addEventListener('submit', async e => {
 		// create contact
 		const contact = await createContact(user.id, contactData.id);
 		const li = document.createElement('li');
+
 		li.textContent = contact.nickname;
 		contactsList.appendChild(li);
 
@@ -61,5 +65,23 @@ contactForm.addEventListener('submit', async e => {
 		console.log('user not found');
 	}
 });
+
+async function enterRoom(room) {
+	// grab
+	console.log('grabbing room data', { room });
+	const { id, name } = room;
+
+	const users = await fetchUsersByRoom(id);
+
+	const messages = await fetchRoomMessages(id);
+
+	const roomData = {
+		id,
+		name,
+		users,
+		messages,
+	};
+	console.log(roomData);
+}
 
 feather.replace();

@@ -93,8 +93,12 @@ POST http://localhost:3333/contact
 content-type: application/json
 
 {
-    "userId": 6,
-    "contactId": 5 
+    "userId": 10,
+    "contactId": 1
 }
+
+###
+
+GET http://localhost:3333/message/1
 
 ###

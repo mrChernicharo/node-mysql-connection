@@ -248,7 +248,7 @@ from user_room
 order by `user`;
 
 
-
+-- get all rooms from a user
 select ur.id as item, r.id as room_id, r.`name` as room, u.id as user_id, u.nickname as `user` 
 from user_room as ur
 left join user as u
@@ -257,19 +257,26 @@ left join room as r
 on r.id = ur.fk_room_id
 where u.id = 1;
 
--- get all contacts from user x
-select distinct 
-	c.id as contact, 
-	c.fk_user_a as id_a,
-	(select nickname from `user` where id = c.fk_user_a) as A, 
-	c.fk_user_b as id_b, 
-	(select nickname from `user` where id =  c.fk_user_b) as B 
-from 
-	contact as c left join `user` as u 
-on 
-	c.fk_user_a = u.id or c.fk_user_b = u.id
-where 
-	c.fk_user_a = 7 or c.fk_user_b = 7;
+-- -----------------------------------
+-- get room data
+select id as room_id, name as room_name, created_at from room where id = 1;
+-- get users data
+select id,
+	(select `nickname` from user where id = fk_user_id) as `user`,
+    joined_at
+from user_room
+where fk_room_id = 1;
+-- get messages
+select id as id_msg,
+    (select `nickname` from `user` where id = fk_user_id) as `user`, 
+    `text`, 
+    created_at as `sent_at`
+from message
+where fk_room_id = 1
+order by created_at asc;
+
+
+
 
 -- kill stuff
 
