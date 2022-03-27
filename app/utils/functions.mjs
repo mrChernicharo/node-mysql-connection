@@ -110,23 +110,6 @@ async function createMessage(userId, roomId, text) {
 	return data;
 }
 
-/**
- *   Room {
- * 		id,
- * 		name,
- *  	users: [
- * 			{ id, nickname }, { id, nickname }
- * 		],
- * 		messages: [
- * 			{ id, user, text }
- * 		]
- *   }
- *
- * 	room: id, name
- * 	user_room: user_id
- *  messages: *
- */
-
 function setGlobalUser(userData) {
 	console.log(userData);
 
