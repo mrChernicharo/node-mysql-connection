@@ -93,6 +93,23 @@ async function fetchRoomMessages(roomId) {
 	return data;
 }
 
+async function createMessage(userId, roomId, text) {
+	console.log(userId, text);
+
+	const res = await fetch(`http://localhost:3333/message`, {
+		method: 'POST',
+		body: JSON.stringify({
+			userId,
+			roomId,
+			text,
+		}),
+		headers: [['Content-Type', 'application/json']],
+	});
+	const data = await res.json();
+
+	return data;
+}
+
 /**
  *   Room {
  * 		id,
@@ -133,5 +150,6 @@ export {
 	createUser,
 	createRoom,
 	createContact,
+	createMessage,
 	setGlobalUser,
 };

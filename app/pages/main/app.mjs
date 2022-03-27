@@ -5,14 +5,28 @@ import {
 	fetchUsersByRoom,
 	fetchRoomMessages,
 	createContact,
+	createMessage,
 } from '../../utils/functions.mjs';
 
 const user = JSON.parse(localStorage.getItem('@user'));
+let currentRoom = null;
 
 const headerNick = document.querySelector('#nick-display');
 const roomsList = document.querySelector('#rooms-list');
 const contactsList = document.querySelector('#contacts-list');
-
+// Modal
+const contactModal = document.querySelector('#contact-modal');
+const contactDetailBtn = document.querySelector('#contacts-detail-btn');
+const contactForm = document.querySelector('#contact-form');
+const contactSearchInput = document.querySelector('#contact-input');
+const roomArea = document.querySelector('#room-area');
+const roomTitle = document.querySelector('#room-title');
+const roomUsersList = document.querySelector('#room-users');
+const roomCloseBtn = document.querySelector('#room-close');
+const contactModalCloseBtn = document.querySelector('#contact-modal-close');
+const messagesArea = document.querySelector('#messages-area');
+const sendMessageForm = document.querySelector('#send-message-form');
+const messageInput = document.querySelector('#message-input');
 // Landing
 
 headerNick.textContent = user.nickname;
@@ -36,20 +50,6 @@ contacts.forEach(contact => {
 	li.textContent = [contact.A, contact.B].filter(c => c !== user.nickname);
 	contactsList.appendChild(li);
 });
-
-// Modal
-const contactModal = document.querySelector('#contact-modal');
-const contactDetailBtn = document.querySelector('#contacts-detail-btn');
-const contactForm = document.querySelector('#contact-form');
-const contactSearchInput = document.querySelector('#contact-input');
-const roomArea = document.querySelector('#room-area');
-const roomTitle = document.querySelector('#room-title');
-const roomUsersList = document.querySelector('#room-users');
-const roomCloseBtn = document.querySelector('#room-close');
-const contactModalCloseBtn = document.querySelector('#contact-modal-close');
-const messagesArea = document.querySelector('#messages-area');
-const sendMessageForm = document.querySelector('send-message-form');
-const messageInput = document.querySelector('message-input');
 
 contactDetailBtn.addEventListener('click', e => {
 	console.log(e);
@@ -79,11 +79,22 @@ contactForm.addEventListener('submit', async e => {
 		console.log('user not found');
 	}
 });
+sendMessageForm.addEventListener('submit', async e => {
+	e.preventDefault();
+
+	const data = await createMessage(
+		user.id,
+		currentRoom.id,
+		messageInput.value
+	);
+	console.log('created message!', data);
+	await refreshMessagesArea();
+});
 
 async function enterRoom(room) {
-	// grab
-
 	console.log('grabbing room data', { room });
+
+	currentRoom = { ...room };
 	const { id, name } = room;
 
 	const users = await fetchUsersByRoom(id);
@@ -107,6 +118,16 @@ async function enterRoom(room) {
 		roomUsersList.appendChild(li);
 	});
 
+	messagesArea.innerHTML = '';
+	messages.forEach(msg => {
+		const li = document.createElement('li');
+		li.textContent = `${msg.user}: ${msg.text}`;
+		messagesArea.appendChild(li);
+	});
+}
+
+async function refreshMessagesArea() {
+	const messages = await fetchRoomMessages(currentRoom.id);
 	messagesArea.innerHTML = '';
 	messages.forEach(msg => {
 		const li = document.createElement('li');

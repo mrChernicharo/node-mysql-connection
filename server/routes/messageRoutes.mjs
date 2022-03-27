@@ -10,4 +10,15 @@ messageRoutes.get('/:roomId', async (req, res) => {
 	res.json(data).status(200);
 });
 
+messageRoutes.post('/', async (req, res) => {
+	const { userId, roomId, text } = req.body;
+	const data = await messageController.createMessage({
+		userId,
+		roomId,
+		text,
+	});
+
+	res.json(data).status(200);
+});
+
 export { messageRoutes };
