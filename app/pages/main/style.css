@@ -1,11 +1,30 @@
-#contacts-modal {
+#contact-modal {
 	border: 1px solid;
 }
 
-#contacts-modal.closed {
+#contact-modal.closed {
 	display: none;
 }
 
 #rooms-list li {
 	border: 1px solid;
+}
+
+#room-area {
+	background-color: lightcoral;
+	border: 1px solid;
+}
+#room-area.closed {
+	display: none;
+}
+
+#messages-area {
+	background-color: #fff;
+	border: 1px solid;
+	padding: 1rem;
+}
+
+.message-item {
+	border: 1px solid;
+	padding: 0.5rem;
 }

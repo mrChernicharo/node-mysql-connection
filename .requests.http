@@ -99,6 +99,6 @@ content-type: application/json
 
 ###
 
-GET http://localhost:3333/message/1
+GET http://localhost:3333/message/2
 
 ###

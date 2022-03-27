@@ -38,14 +38,28 @@ contacts.forEach(contact => {
 });
 
 // Modal
-const contactModal = document.querySelector('#contacts-modal');
+const contactModal = document.querySelector('#contact-modal');
 const contactDetailBtn = document.querySelector('#contacts-detail-btn');
 const contactForm = document.querySelector('#contact-form');
 const contactSearchInput = document.querySelector('#contact-input');
+const roomArea = document.querySelector('#room-area');
+const roomTitle = document.querySelector('#room-title');
+const roomUsersList = document.querySelector('#room-users');
+const roomCloseBtn = document.querySelector('#room-close');
+const contactModalCloseBtn = document.querySelector('#contact-modal-close');
+const messagesArea = document.querySelector('#messages-area');
+const sendMessageForm = document.querySelector('send-message-form');
+const messageInput = document.querySelector('message-input');
 
 contactDetailBtn.addEventListener('click', e => {
 	console.log(e);
 	contactModal.classList.toggle('closed');
+});
+contactModalCloseBtn.addEventListener('click', e => {
+	contactModal.classList.add('closed');
+});
+roomCloseBtn.addEventListener('click', e => {
+	roomArea.classList.add('closed');
 });
 
 contactForm.addEventListener('submit', async e => {
@@ -68,6 +82,7 @@ contactForm.addEventListener('submit', async e => {
 
 async function enterRoom(room) {
 	// grab
+
 	console.log('grabbing room data', { room });
 	const { id, name } = room;
 
@@ -82,6 +97,22 @@ async function enterRoom(room) {
 		messages,
 	};
 	console.log(roomData);
+
+	roomArea.classList.remove('closed');
+	roomTitle.textContent = name;
+	roomUsersList.innerHTML = '';
+	users.forEach(user => {
+		const li = document.createElement('li');
+		li.textContent = user.user;
+		roomUsersList.appendChild(li);
+	});
+
+	messagesArea.innerHTML = '';
+	messages.forEach(msg => {
+		const li = document.createElement('li');
+		li.textContent = `${msg.user}: ${msg.text}`;
+		messagesArea.appendChild(li);
+	});
 }
 
 feather.replace();
