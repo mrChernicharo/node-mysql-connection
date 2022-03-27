@@ -1,0 +1,4 @@
+-   query placeholders
+-   enable quotes in messages
+-   modify DTO for /contact?
+-   populate selects
