@@ -8,9 +8,10 @@ import {
 	createMessage,
 } from '../../utils/functions.mjs';
 
-// Global
+// Globals
 const user = JSON.parse(localStorage.getItem('@user'));
 let currentRoom = null;
+
 // Landing
 const headerNick = document.querySelector('#nick-display');
 const roomsList = document.querySelector('#rooms-list');
@@ -29,6 +30,10 @@ const contactModalCloseBtn = document.querySelector('#contact-modal-close');
 const messagesArea = document.querySelector('#messages-area');
 const sendMessageForm = document.querySelector('#send-message-form');
 const messageInput = document.querySelector('#message-input');
+
+const createRoomModal = document.querySelector('#create-room-modal')
+const createNewRoomBtn = document.querySelector('#rooms-detail-btn')
+const contactsSelect = document.querySelector('#create-room-contacts-select')
 
 // Landing
 await initPage();
@@ -94,6 +99,10 @@ async function appendListeners() {
 		console.log('created message!', data);
 		await refreshMessagesArea();
 	});
+	createNewRoomBtn.addEventListener('click', async e => {
+		createRoomModal.classList.toggle('closed')
+		populateContactsSelect()
+	})
 }
 
 async function enterRoom(room) {
@@ -135,6 +144,7 @@ async function enterRoom(room) {
 
 async function refreshMessagesArea() {
 	const messages = await fetchRoomMessages(currentRoom.id);
+
 	messagesArea.innerHTML = '';
 	messages.forEach(msg => {
 		const li = document.createElement('li');
@@ -142,5 +152,31 @@ async function refreshMessagesArea() {
 		messagesArea.appendChild(li);
 	});
 }
+
+
+async function populateContactsSelect() {
+	contactsSelect.innerHTML = '';
+	// get contacts from room
+	const contacts = await fetchUserContacts(user.id)
+	console.log('populate the select with these contacts ', contacts)
+
+	// A: "Edna"​​
+	// B: "Felipe"​
+	// contact: 2​
+	// id_a: 3​
+	// id_b: 1
+
+	// render options
+	// contacts.filter(c => ).map(c => ({
+
+	// })).forEach(contact => {
+	// 	const option = document.createElement('option')
+	// 	option.value = contact.id
+	// 	option.textContent = contact.nickname
+
+	// 	contactsSelect.appendChild(option)
+	// })
+}
+
 
 feather.replace();
