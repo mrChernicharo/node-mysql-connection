@@ -14,7 +14,6 @@ export class UserRoomController {
 	}
 
 	async getUserRooms({ userId }) {
-		console.log('getting with id ' + userId);
 		const [response] = await db.execute(
 			`select r.id as id, r.\`name\` 
 			from user_room as ur

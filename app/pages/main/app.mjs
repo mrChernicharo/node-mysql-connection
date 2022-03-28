@@ -10,6 +10,7 @@ import {
 } from '../../utils/functions.mjs';
 
 // Globals
+let socket;
 const user = JSON.parse(localStorage.getItem('@user'));
 let currentRoom = null;
 const newRoomContacts = [];
@@ -62,6 +63,10 @@ async function initPage() {
 		li.textContent = contact.nickname;
 		contactsList.appendChild(li);
 	});
+
+	socket = io.connect('http://localhost:3334');
+
+	console.log({ socket });
 }
 
 async function appendListeners() {
