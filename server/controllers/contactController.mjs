@@ -8,7 +8,8 @@ export class ContactController {
 	}
 
 	async getUserContacts({ userId }) {
-		const [rows] = await this.db.execute(`
+		const [rows] = await this.db.execute(
+			`
 			select distinct 
 				c.id as contact, 
 				c.fk_user_a as id_a,
@@ -20,10 +21,27 @@ export class ContactController {
 			on 
 				c.fk_user_a = u.id or c.fk_user_b = u.id
 			where 
-				c.fk_user_a = '${userId}' or c.fk_user_b = '${userId}';
-		`);
-		// console.log('contacts', rows);
-		return rows || null;
+				c.fk_user_a = ? or c.fk_user_b = ?;
+		`,
+			[userId, userId]
+		);
+
+		const contacts = rows.map(row => {
+			const contact = {
+				id: '',
+				nickname: '',
+			};
+			if (row.id_a === Number(userId)) {
+				contact.id = row.id_b;
+				contact.nickname = row.B;
+			} else if (row.id_b === Number(userId)) {
+				contact.id = row.id_a;
+				contact.nickname = row.A;
+			}
+			return contact;
+		});
+
+		return contacts || null;
 	}
 
 	async createContact({ userId, contactId }) {

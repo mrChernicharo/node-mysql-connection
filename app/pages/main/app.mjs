@@ -31,9 +31,9 @@ const messagesArea = document.querySelector('#messages-area');
 const sendMessageForm = document.querySelector('#send-message-form');
 const messageInput = document.querySelector('#message-input');
 
-const createRoomModal = document.querySelector('#create-room-modal')
-const createNewRoomBtn = document.querySelector('#rooms-detail-btn')
-const contactsSelect = document.querySelector('#create-room-contacts-select')
+const createRoomModal = document.querySelector('#create-room-modal');
+const createNewRoomBtn = document.querySelector('#rooms-detail-btn');
+const contactsSelect = document.querySelector('#create-room-contacts-select');
 
 // Landing
 await initPage();
@@ -54,9 +54,7 @@ async function initPage() {
 	});
 	contacts.forEach(contact => {
 		const li = document.createElement('li');
-		li.textContent = [contact.A, contact.B].filter(
-			c => c !== user.nickname
-		);
+		li.textContent = contact.nickname;
 		contactsList.appendChild(li);
 	});
 }
@@ -100,9 +98,9 @@ async function appendListeners() {
 		await refreshMessagesArea();
 	});
 	createNewRoomBtn.addEventListener('click', async e => {
-		createRoomModal.classList.toggle('closed')
-		populateContactsSelect()
-	})
+		createRoomModal.classList.toggle('closed');
+		populateContactsSelect();
+	});
 }
 
 async function enterRoom(room) {
@@ -146,19 +144,31 @@ async function refreshMessagesArea() {
 	const messages = await fetchRoomMessages(currentRoom.id);
 
 	messagesArea.innerHTML = '';
-	messages.forEach(msg => {
-		const li = document.createElement('li');
-		li.textContent = `${msg.user}: ${msg.text}`;
-		messagesArea.appendChild(li);
-	});
+	messages
+		// .sort((a, b) => a.create_at - b.created_at)
+		.forEach(msg => {
+			const li = document.createElement('li');
+			li.textContent = `${msg.user}: ${msg.text}`;
+			messagesArea.appendChild(li);
+		});
 }
 
-
 async function populateContactsSelect() {
+	Array.from(contactsSelect.childNodes).forEach(node =>
+		node.removeEventListener('click', null)
+	);
 	contactsSelect.innerHTML = '';
 	// get contacts from room
-	const contacts = await fetchUserContacts(user.id)
-	console.log('populate the select with these contacts ', contacts)
+	const contacts = await fetchUserContacts(user.id);
+	console.log('populate the select with these contacts ', contacts);
+	contacts.forEach(contact => {
+		const li = document.createElement('li');
+		li.value = contact.id;
+		li.textContent = contact.nickname;
+		li.addEventListener('click', () => addContactToRoom(contact));
+
+		contactsSelect.appendChild(li);
+	});
 
 	// A: "Edna"​​
 	// B: "Felipe"​
@@ -178,5 +188,8 @@ async function populateContactsSelect() {
 	// })
 }
 
+function addContactToRoom(contact) {
+	console.log(contact);
+}
 
 feather.replace();
