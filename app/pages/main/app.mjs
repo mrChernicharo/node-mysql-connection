@@ -6,6 +6,7 @@ import {
 	fetchRoomMessages,
 	createContact,
 	createMessage,
+	createRoom,
 } from '../../utils/functions.mjs';
 
 // Globals
@@ -184,15 +185,19 @@ function addContactToRoom(contact) {
 	selectedContactsList.appendChild(li);
 }
 
-function handleCreateRoomSubmit(e) {
+async function handleCreateRoomSubmit(e) {
 	e.preventDefault();
 	console.log('submit room', roomNameInput.value, newRoomContacts);
 	if (!roomNameInput.value) throw Error('A room needs a name');
 	if (!newRoomContacts.length) throw Error('A room needs contacts');
 
+	const createdRoom = await createRoom(
+		user.id,
+		roomNameInput.value,
+		newRoomContacts
+	);
 	newRoomContacts.splice(0, newRoomContacts.length);
-	// save room
-	// save room_users
+	console.log('created new room!', createdRoom);
 }
 
 feather.replace();
