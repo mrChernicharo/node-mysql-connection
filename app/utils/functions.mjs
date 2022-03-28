@@ -44,7 +44,7 @@ async function createRoom(userId, roomName, contacts) {
 		body: JSON.stringify({
 			roomName,
 			userId,
-			contacts
+			contacts,
 		}),
 		headers: [['Content-Type', 'application/json']],
 	});

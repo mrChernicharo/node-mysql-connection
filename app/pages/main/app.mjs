@@ -19,7 +19,7 @@ const headerNick = document.querySelector('#nick-display');
 const roomsList = document.querySelector('#rooms-list');
 const contactsList = document.querySelector('#contacts-list');
 // ContactModal
-const contactModal = document.querySelector('#contact-modal');
+const contactModal = document.querySelector('#add-contact-modal');
 const contactDetailBtn = document.querySelector('#contacts-detail-btn');
 const contactForm = document.querySelector('#contact-form');
 const contactSearchInput = document.querySelector('#contact-input');
@@ -36,6 +36,7 @@ const messageInput = document.querySelector('#message-input');
 const selectedContactsList = document.querySelector('#create-room-selected-contacts');
 const createRoomModal = document.querySelector('#create-room-modal');
 const createNewRoomBtn = document.querySelector('#rooms-detail-btn');
+const createNewRoomCloseBtn = document.querySelector('#create-room-close');
 const contactsSelect = document.querySelector('#create-room-contacts-select');
 const createRoomForm = document.querySelector('#create-room-form');
 const roomNameInput = document.querySelector('#room-name');
@@ -73,6 +74,9 @@ async function appendListeners() {
 	roomCloseBtn.addEventListener('click', e => {
 		roomArea.classList.add('closed');
 	});
+	createNewRoomCloseBtn.addEventListener('click', e => {
+		createRoomModal.classList.add('closed');
+	});
 	contactForm.addEventListener('submit', async e => {
 		e.preventDefault();
 		const contactData = await fetchUserByNick(contactSearchInput.value);
@@ -90,7 +94,6 @@ async function appendListeners() {
 			console.log('user not found');
 		}
 	});
-
 	sendMessageForm.addEventListener('submit', async e => {
 		e.preventDefault();
 
@@ -103,10 +106,7 @@ async function appendListeners() {
 		await refreshMessagesArea();
 	});
 	createNewRoomBtn.addEventListener('click', async e => {
-		createRoomModal.classList.toggle('closed');
-		populateContactsSelect();
-
-		createRoomForm.addEventListener('submit', handleCreateRoomSubmit);
+		handleCreateNewRoom();
 	});
 }
 
@@ -116,20 +116,15 @@ async function enterRoom(room) {
 		? roomArea.classList.toggle('closed')
 		: roomArea.classList.remove('closed');
 
+	refreshRoomParticipants(room);
+	refreshMessagesArea();
+}
+
+async function refreshRoomParticipants(room) {
 	currentRoom = { ...room };
 	const { id, name } = room;
 
 	const users = await fetchUsersByRoom(id);
-
-	const messages = await fetchRoomMessages(id);
-
-	const roomData = {
-		id,
-		name,
-		users,
-		messages,
-	};
-	console.log(roomData);
 
 	roomTitle.textContent = name;
 	roomUsersList.innerHTML = '';
@@ -137,13 +132,6 @@ async function enterRoom(room) {
 		const li = document.createElement('li');
 		li.textContent = user.user;
 		roomUsersList.appendChild(li);
-	});
-
-	messagesArea.innerHTML = '';
-	messages.forEach(msg => {
-		const li = document.createElement('li');
-		li.textContent = `${msg.user}: ${msg.text}`;
-		messagesArea.appendChild(li);
 	});
 }
 
@@ -155,9 +143,36 @@ async function refreshMessagesArea() {
 		// .sort((a, b) => a.create_at - b.created_at)
 		.forEach(msg => {
 			const li = document.createElement('li');
-			li.textContent = `${msg.user}: ${msg.text}`;
+			// prettier-ignore
+			const messageComponentClasses = ['author-div', 'text-div', 'date-div'];
+			const authorDiv = document.createElement('div');
+			const textDiv = document.createElement('div');
+			const dateDiv = document.createElement('div');
+
+			authorDiv.textContent = msg.user;
+			textDiv.textContent = msg.text;
+			dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
+
+			[authorDiv, textDiv, dateDiv].forEach((el, i) => {
+				console.log({ el });
+				el.setAttribute('class', messageComponentClasses[i]);
+				li.appendChild(el);
+			});
+
+			msg.user === user.nickname
+				? li.classList.add('user')
+				: li.classList.add('contact');
+			li.classList.add('message');
+
 			messagesArea.appendChild(li);
 		});
+}
+
+async function handleCreateNewRoom() {
+	createRoomModal.classList.toggle('closed');
+	populateContactsSelect();
+
+	createRoomForm.addEventListener('submit', handleCreateRoomSubmit);
 }
 
 async function populateContactsSelect() {
@@ -165,9 +180,9 @@ async function populateContactsSelect() {
 		node.removeEventListener('click', null)
 	);
 	contactsSelect.innerHTML = '';
-	// get contacts from room
+
 	const contacts = await fetchUserContacts(user.id);
-	console.log('populate the select with these contacts ', contacts);
+
 	contacts.forEach(contact => {
 		const li = document.createElement('li');
 		li.value = contact.id;
@@ -187,7 +202,6 @@ function addContactToRoom(contact) {
 
 async function handleCreateRoomSubmit(e) {
 	e.preventDefault();
-	console.log('submit room', roomNameInput.value, newRoomContacts);
 	if (!roomNameInput.value) throw Error('A room needs a name');
 	if (!newRoomContacts.length) throw Error('A room needs contacts');
 
@@ -198,6 +212,21 @@ async function handleCreateRoomSubmit(e) {
 	);
 	newRoomContacts.splice(0, newRoomContacts.length);
 	console.log('created new room!', createdRoom);
+
+	refreshRoomsList();
+	createRoomModal.classList.toggle('closed');
+}
+
+async function refreshRoomsList() {
+	const rooms = await fetchRoomsByUser(user.id);
+
+	roomsList.innerHTML = '';
+	rooms.forEach(room => {
+		const li = document.createElement('li');
+		li.textContent = room.name;
+		li.addEventListener('click', () => enterRoom(room));
+		roomsList.appendChild(li);
+	});
 }
 
 feather.replace();
