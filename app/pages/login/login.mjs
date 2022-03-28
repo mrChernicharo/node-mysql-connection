@@ -13,7 +13,7 @@ console.log(io, nickInput);
 
 form.addEventListener('submit', async e => {
 	e.preventDefault();
-	console.log(nickInput.value);
+	if (!nickInput.value) throw Error('We need your nickname');
 
 	let user = await fetchUserByNick(nickInput.value);
 	console.log(user ? 'known user' : 'new user');

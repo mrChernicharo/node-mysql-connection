@@ -12,9 +12,14 @@
 		<script src="https://unpkg.com/feather-icons"></script>
 
 		<title>Chat App</title>
+		<style>
+			body {
+				font-family: 'Courier New', Courier, monospace;
+			}
+		</style>
 	</head>
 	<body>
-		<h1>Chat app <i data-feather="sun"></i></h1>
+		<h1>Chat App <i data-feather="sun"></i></h1>
 
 		<form id="nick-form">
 			<label for="nick-input">Nickname</label>
@@ -25,6 +30,8 @@
 			/>
 			<button>Register</button>
 		</form>
+
+		<p>Start chatting with random people now</p>
 
 		<!-- prettier-ignore -->
 		<script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>

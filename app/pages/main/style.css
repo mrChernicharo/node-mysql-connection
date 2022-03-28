@@ -55,8 +55,9 @@ li:hover {
 #messages-area {
 	background-color: #fff;
 	border: 1px solid;
-	padding: 1rem;
+	padding-block: 1rem;
 	height: calc(100vh - 320px);
+	width: min(100%, 500px);
 	display: flex;
 	flex-direction: column;
 	overflow-y: scroll;
