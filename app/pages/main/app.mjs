@@ -11,6 +11,7 @@ import {
 // Globals
 const user = JSON.parse(localStorage.getItem('@user'));
 let currentRoom = null;
+const newRoomContacts = [];
 
 // Landing
 const headerNick = document.querySelector('#nick-display');
@@ -30,11 +31,13 @@ const contactModalCloseBtn = document.querySelector('#contact-modal-close');
 const messagesArea = document.querySelector('#messages-area');
 const sendMessageForm = document.querySelector('#send-message-form');
 const messageInput = document.querySelector('#message-input');
-
+// prettier-ignore
+const selectedContactsList = document.querySelector('#create-room-selected-contacts');
 const createRoomModal = document.querySelector('#create-room-modal');
 const createNewRoomBtn = document.querySelector('#rooms-detail-btn');
 const contactsSelect = document.querySelector('#create-room-contacts-select');
-
+const createRoomForm = document.querySelector('#create-room-form');
+const roomNameInput = document.querySelector('#room-name');
 // Landing
 await initPage();
 
@@ -86,6 +89,7 @@ async function appendListeners() {
 			console.log('user not found');
 		}
 	});
+
 	sendMessageForm.addEventListener('submit', async e => {
 		e.preventDefault();
 
@@ -100,6 +104,8 @@ async function appendListeners() {
 	createNewRoomBtn.addEventListener('click', async e => {
 		createRoomModal.classList.toggle('closed');
 		populateContactsSelect();
+
+		createRoomForm.addEventListener('submit', handleCreateRoomSubmit);
 	});
 }
 
@@ -169,27 +175,24 @@ async function populateContactsSelect() {
 
 		contactsSelect.appendChild(li);
 	});
-
-	// A: "Edna"​​
-	// B: "Felipe"​
-	// contact: 2​
-	// id_a: 3​
-	// id_b: 1
-
-	// render options
-	// contacts.filter(c => ).map(c => ({
-
-	// })).forEach(contact => {
-	// 	const option = document.createElement('option')
-	// 	option.value = contact.id
-	// 	option.textContent = contact.nickname
-
-	// 	contactsSelect.appendChild(option)
-	// })
 }
 
 function addContactToRoom(contact) {
-	console.log(contact);
+	const li = document.createElement('li');
+	li.textContent = contact.nickname;
+	newRoomContacts.push(contact);
+	selectedContactsList.appendChild(li);
+}
+
+function handleCreateRoomSubmit(e) {
+	e.preventDefault();
+	console.log('submit room', roomNameInput.value, newRoomContacts);
+	if (!roomNameInput.value) throw Error('A room needs a name');
+	if (!newRoomContacts.length) throw Error('A room needs contacts');
+
+	newRoomContacts.splice(0, newRoomContacts.length);
+	// save room
+	// save room_users
 }
 
 feather.replace();
