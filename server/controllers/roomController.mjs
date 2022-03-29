@@ -34,8 +34,11 @@ export class RoomController {
 
 		if (contacts) {
 			contacts.forEach(contact => {
-				this.dbEvents.emit('addUserToRoom', { userId: contact.id, roomId: insertId });
-			})
+				this.dbEvents.emit('addUserToRoom', {
+					userId: contact.id,
+					roomId: insertId,
+				});
+			});
 		}
 
 		const room = await this.getRoomById({ id: insertId });
@@ -49,11 +52,11 @@ export class RoomController {
 			from user_room as ur
             left join user as u on u.id = ur.fk_user_id
             left join room as r on r.id = ur.fk_room_id
-            where r.id = ${roomId};`
+            where r.id = ?;`,
+			[roomId]
 		);
 
 		// console.log('getting all users from room ' + roomId, response);
-
 		return response;
 	}
 
@@ -64,7 +67,6 @@ export class RoomController {
 
 		return room;
 	}
-
 }
 
 const roomController = new RoomController(db, dbEvents);

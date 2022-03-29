@@ -1,10 +1,13 @@
-import { db } from '../db.mjs';
+import { db, dbEvents } from '../db.mjs';
 import { getCurrentTimestamp } from '../utils/functions.mjs';
 
 export class MessageController {
 	db;
-	constructor(db) {
+	dbEvents;
+
+	constructor(db, dbEvents) {
 		this.db = db;
+		this.dbEvents;
 	}
 
 	async getRoomMessages({ roomId }) {
@@ -34,10 +37,9 @@ export class MessageController {
 			 from \`message\` where id = ?;`,
 			[insertId]
 		);
-
 		return message;
 	}
 }
 
-const messageController = new MessageController(db);
+const messageController = new MessageController(db, dbEvents);
 export { messageController };

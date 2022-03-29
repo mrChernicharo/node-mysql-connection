@@ -8,9 +8,9 @@ import {
 	createMessage,
 	createRoom,
 } from '../../utils/functions.mjs';
+import { socket } from '../../utils/socket.mjs';
 
 // Globals
-let socket;
 const user = JSON.parse(localStorage.getItem('@user'));
 let currentRoom = null;
 const newRoomContacts = [];
@@ -63,10 +63,6 @@ async function initPage() {
 		li.textContent = contact.nickname;
 		contactsList.appendChild(li);
 	});
-
-	socket = io.connect('http://localhost:3334');
-
-	console.log({ socket });
 }
 
 async function appendListeners() {
@@ -108,6 +104,8 @@ async function appendListeners() {
 			messageInput.value
 		);
 		console.log('created message!', data);
+		socket.emit('sendMessage', data);
+
 		await refreshMessagesArea();
 	});
 	createNewRoomBtn.addEventListener('click', async e => {
@@ -159,7 +157,6 @@ async function refreshMessagesArea() {
 			dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
 
 			[authorDiv, textDiv, dateDiv].forEach((el, i) => {
-				console.log({ el });
 				el.setAttribute('class', messageComponentClasses[i]);
 				li.appendChild(el);
 			});
