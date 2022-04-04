@@ -40,7 +40,7 @@ export class MessageController {
 			from message where id = ?;`,
 			[insertId]
 		);
-		return message;
+		return message[0];
 	}
 }
 

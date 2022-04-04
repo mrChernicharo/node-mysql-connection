@@ -34,18 +34,18 @@ io.on('connection', async socket => {
 		}
 
 		logStatus();
+		console.log(socket.rooms)
+
 	});
 
 	socket.on('user:send:message', data => {
 		console.log('user:send:message', { data });
-		console.log({ socketRooms: socket.rooms });
 
-		// const { message_id, text, created_at, user, room_id } = data;
-		// socket.emit('server:broadcast:message', data);
-		socket
-			// broadcast
-			// .in(`${data.room_name}:${data.room_id}`)
-			.emit('server:broadcast:message', data);
+		const { room_name, room_id } = data
+		console.log(`${room_name}:${room_id}`)
+
+		io.to(`${room_name}:${room_id}`).emit('server:broadcast:message', data)
+
 	});
 
 	socket.on('disconnect', () => {

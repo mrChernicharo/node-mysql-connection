@@ -54,6 +54,8 @@ async function initPage() {
 
 	const rooms = await fetchRoomsByUser(user.id);
 	const contacts = await fetchUserContacts(user.id);
+	console.log(rooms)
+
 
 	rooms.forEach(room => {
 		const li = document.createElement('li');
@@ -69,7 +71,16 @@ async function initPage() {
 	});
 
 	socket.emit('user:connect', { user });
-	socket.on('disconnect');
+	socket.on('disconnect', () => {
+		console.log('disconnected', socket.id)
+	});
+
+
+	// for (const room of rooms) {
+	// 	  socket.join(`${room.name}:${room.id}`)
+	// }
+	// console.log(`${room.name}:${room.id}`)
+
 }
 
 async function appendListeners() {

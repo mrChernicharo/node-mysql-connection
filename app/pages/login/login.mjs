@@ -9,7 +9,6 @@ import {
 const nickInput = document.querySelector('#nick-input');
 const form = document.querySelector('#nick-form');
 
-console.log(io, nickInput);
 
 form.addEventListener('submit', async e => {
 	e.preventDefault();
@@ -29,9 +28,11 @@ form.addEventListener('submit', async e => {
 
 	setGlobalUser(user);
 
-	console.log('...redirecting');
+	console.log('...redirecting', user);
+	const url = `/app/pages/main/?nickname=${encodeURIComponent(user.nickname)}`;
+	console.log(url);
 	setTimeout(
-		() => location.assign(`/app/pages/main?nickname=${user.nickname}`),
+		() => { window.location.href = url },
 		2000
 	);
 });
