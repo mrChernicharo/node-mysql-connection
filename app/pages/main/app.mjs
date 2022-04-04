@@ -71,6 +71,16 @@ async function initPage() {
 	});
 
 	socket.emit('user:connect', { user });
+
+	socket.on('server:broadcast:message', data => {
+		console.log('server:broadcast:message', data);
+		const { message_id: id, text, created_at: sent_at, user, user_id, room_id, room_name } = data
+		const msg = {
+			id, text, sent_at, user
+		}
+		appendMessage(msg);
+	});
+
 	socket.on('disconnect', () => {
 		console.log('disconnected', socket.id)
 	});
@@ -164,29 +174,33 @@ async function loadMessages() {
 	messages
 		// .sort((a, b) => a.create_at - b.created_at)
 		.forEach(msg => {
-			const li = document.createElement('li');
-			// prettier-ignore
-			const messageComponentClasses = ['author-div', 'text-div', 'date-div'];
-			const authorDiv = document.createElement('div');
-			const textDiv = document.createElement('div');
-			const dateDiv = document.createElement('div');
-
-			authorDiv.textContent = msg.user;
-			textDiv.textContent = msg.text;
-			dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
-
-			[authorDiv, textDiv, dateDiv].forEach((el, i) => {
-				el.setAttribute('class', messageComponentClasses[i]);
-				li.appendChild(el);
-			});
-
-			msg.user === user.nickname
-				? li.classList.add('user')
-				: li.classList.add('contact');
-			li.classList.add('message');
-
-			messagesArea.appendChild(li);
+			appendMessage(msg)
 		});
+}
+
+function appendMessage(msg) {
+	const li = document.createElement('li');
+	// prettier-ignore
+	const messageComponentClasses = ['author-div', 'text-div', 'date-div'];
+	const authorDiv = document.createElement('div');
+	const textDiv = document.createElement('div');
+	const dateDiv = document.createElement('div');
+
+	authorDiv.textContent = msg.user;
+	textDiv.textContent = msg.text;
+	dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
+
+	[authorDiv, textDiv, dateDiv].forEach((el, i) => {
+		el.setAttribute('class', messageComponentClasses[i]);
+		li.appendChild(el);
+	});
+
+	msg.user === user.nickname
+		? li.classList.add('user')
+		: li.classList.add('contact');
+	li.classList.add('message');
+
+	messagesArea.appendChild(li);
 }
 
 async function handleCreateNewRoom() {

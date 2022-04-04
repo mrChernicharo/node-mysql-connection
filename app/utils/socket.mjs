@@ -6,9 +6,7 @@ console.log({ socket });
 // 	console.log('userSendMessage', data);
 // });
 
-socket.on('server:broadcast:message', data => {
-	console.log('server:broadcast:message', data);
-});
+
 
 // socket.on('server:broadcast:typing', data => {
 // 	console.log(data);
