@@ -95,7 +95,7 @@ async function fetchRoomMessages(roomId) {
 }
 
 async function createMessage(userId, roomId, text) {
-	console.log(userId, text);
+	console.log({ userId, text, roomId });
 
 	const res = await fetch(`http://localhost:3333/message`, {
 		method: 'POST',
@@ -118,7 +118,10 @@ function setGlobalUser(userData) {
 		appUser[key] = userData[key];
 	});
 
-	localStorage.setItem('@user', JSON.stringify(userData));
+	localStorage.setItem(
+		`@user:${userData.id}:${userData.created_at}`,
+		JSON.stringify(userData)
+	);
 
 	console.log({ appUser, userData });
 }

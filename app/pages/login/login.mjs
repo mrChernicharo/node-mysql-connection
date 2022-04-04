@@ -30,7 +30,10 @@ form.addEventListener('submit', async e => {
 	setGlobalUser(user);
 
 	console.log('...redirecting');
-	setTimeout(() => location.assign('/app/pages/main/'), 2000);
+	setTimeout(
+		() => location.assign(`/app/pages/main?nickname=${user.nickname}`),
+		2000
+	);
 });
 
 feather.replace();

@@ -32,9 +32,12 @@ export class MessageController {
 		const { insertId } = result;
 
 		const [message, buffers] = await db.execute(
-			`select 
-			id, text, created_at, (select nickname from user where id = fk_user_id) as user
-			 from \`message\` where id = ?;`,
+			`select id as message_id, text, created_at, 
+			(select id from user where id = fk_user_id) as user_id, 
+			(select nickname from user where id = fk_user_id) as user, 
+			(select id from room where id = fk_room_id) as room_id, 
+			(select name from room where id = fk_room_id) as room_name 
+			from message where id = ?;`,
 			[insertId]
 		);
 		return message;

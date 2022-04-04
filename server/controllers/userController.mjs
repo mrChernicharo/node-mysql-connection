@@ -23,7 +23,7 @@ export class UserController {
 		const [rows, fields] = await db.execute(
 			`select * from user where nickname = '${nickname}';`
 		);
-		console.log(rows);
+		// console.log(rows);
 		return rows[0] ?? null;
 	}
 
@@ -69,22 +69,6 @@ export class UserController {
 			`delete from user where id = ${id};`
 		);
 		return rows;
-	}
-
-	async getUserRooms({ userId }) {
-		const [response] = await db.execute(
-			`select ur.id as item, r.id as room_id, r.\`name\` as room, u.id as user_id, u.nickname as \`user\` 
-			from user_room as ur
-            left join user as u
-            on u.id = ur.fk_user_id
-            left join room as r
-            on r.id = ur.fk_room_id
-            where u.id = ${userId};`
-		);
-
-		console.log('gotten user rooms', response);
-
-		return response;
 	}
 }
 

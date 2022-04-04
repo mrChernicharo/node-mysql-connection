@@ -11,7 +11,7 @@ import {
 import { socket } from '../../utils/socket.mjs';
 
 // Globals
-const user = JSON.parse(localStorage.getItem('@user'));
+let user;
 let currentRoom = null;
 const newRoomContacts = [];
 
@@ -47,6 +47,9 @@ await initPage();
 await appendListeners();
 
 async function initPage() {
+	const nickname = location.search.split('nickname=')[1];
+	user = await fetchUserByNick(nickname);
+
 	headerNick.textContent = user.nickname;
 
 	const rooms = await fetchRoomsByUser(user.id);
@@ -58,11 +61,15 @@ async function initPage() {
 		li.addEventListener('click', () => enterRoom(room));
 		roomsList.appendChild(li);
 	});
+
 	contacts.forEach(contact => {
 		const li = document.createElement('li');
 		li.textContent = contact.nickname;
 		contactsList.appendChild(li);
 	});
+
+	socket.emit('user:connect', { user });
+	socket.on('disconnect');
 }
 
 async function appendListeners() {
@@ -75,9 +82,13 @@ async function appendListeners() {
 	roomCloseBtn.addEventListener('click', e => {
 		roomArea.classList.add('closed');
 	});
+	createNewRoomBtn.addEventListener('click', async e => {
+		handleCreateNewRoom();
+	});
 	createNewRoomCloseBtn.addEventListener('click', e => {
 		createRoomModal.classList.add('closed');
 	});
+
 	contactForm.addEventListener('submit', async e => {
 		e.preventDefault();
 		const contactData = await fetchUserByNick(contactSearchInput.value);
@@ -104,12 +115,9 @@ async function appendListeners() {
 			messageInput.value
 		);
 		console.log('created message!', data);
-		socket.emit('sendMessage', data);
+		socket.emit('user:send:message', data);
 
-		await refreshMessagesArea();
-	});
-	createNewRoomBtn.addEventListener('click', async e => {
-		handleCreateNewRoom();
+		// await loadMessages();
 	});
 }
 
@@ -120,7 +128,7 @@ async function enterRoom(room) {
 		: roomArea.classList.remove('closed');
 
 	refreshRoomParticipants(room);
-	refreshMessagesArea();
+	loadMessages();
 }
 
 async function refreshRoomParticipants(room) {
@@ -138,7 +146,7 @@ async function refreshRoomParticipants(room) {
 	});
 }
 
-async function refreshMessagesArea() {
+async function loadMessages() {
 	const messages = await fetchRoomMessages(currentRoom.id);
 
 	messagesArea.innerHTML = '';
