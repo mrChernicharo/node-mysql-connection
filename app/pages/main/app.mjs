@@ -74,7 +74,7 @@ async function initPage() {
 
 	socket.on('server:broadcast:message', data => {
 		console.log('server:broadcast:message', data);
-		const { message_id: id, text, created_at: sent_at, user, user_id, room_id, room_name } = data
+		const { message_id: id, text, created_at: sent_at, user, user_id, room_id, room_name } = data;
 		const msg = {
 			id, text, sent_at, user
 		}
