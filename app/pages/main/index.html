@@ -1,96 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="../../assets/js.svg" type="image/x-icon" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://unpkg.com/feather-icons"></script>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="shortcut icon"
+			href="../../assets/js.svg"
+			type="image/x-icon"
+		/>
+		<link rel="stylesheet" href="style.css" />
+		<script src="https://unpkg.com/feather-icons"></script>
 
-    <title>Chat App</title>
-  </head>
-  <body>
-    <header>
-      <h1>Chat-app <i data-feather="sun"></i></h1>
-      <i data-feather="user"></i>
-      <span id="nick-display"></span>
-    </header>
+		<title>Chat App</title>
+	</head>
+	<body>
+		<div id="page-container">
+			<header>
+				<div>
+					<i data-feather="message-square"></i>
+					<span>zChat</span>
+				</div>
 
-    <hr />
+				<div>
+					<span id="nick-display"></span>
+					<i data-feather="user"></i>
+					<i data-feather="more-vertical"></i>
+				</div>
+			</header>
 
-    <section id="rooms">
-      <h3>
-        Rooms
-        <button id="rooms-detail-btn">
-          <i data-feather="plus"></i>
-        </button>
-      </h3>
+			<nav id="tabs">
+				<div id="chats-tab" class="nav-tab active">Chats</div>
+				<div id="contacts-tab" class="nav-tab">Contacts</div>
+			</nav>
 
-      <div id="create-room-modal" class="closed">
-        <button id="create-room-close"><i data-feather="x"></i></button>
+			<section id="rooms">
+				<h3>
+					Rooms
+					<button id="rooms-detail-btn">
+						<i data-feather="plus"></i>
+					</button>
+				</h3>
 
-        <h1>create new room</h1>
-        <form id="create-room-form">
-          <label for="room-name">how should we call this room?</label>
-          <input type="text" id="room-name" />
+				<div id="create-room-modal" class="closed">
+					<button id="create-room-close">
+						<i data-feather="x"></i>
+					</button>
 
-          <ul id="create-room-selected-contacts"></ul>
+					<h1>create new room</h1>
+					<form id="create-room-form">
+						<label for="room-name"
+							>how should we call this room?</label
+						>
+						<input type="text" id="room-name" />
 
-          <ul id="create-room-contacts-select"></ul>
+						<ul id="create-room-selected-contacts"></ul>
 
-          <input type="submit" value="Create Room" />
-        </form>
-      </div>
+						<ul id="create-room-contacts-select"></ul>
 
-      <ul id="rooms-list"></ul>
-    </section>
+						<input type="submit" value="Create Room" />
+					</form>
+				</div>
 
-    <section id="contacts">
-      <h3>
-        Contacts
-        <button id="contacts-detail-btn">
-          <i data-feather="plus"></i>
-        </button>
-      </h3>
+				<ul id="rooms-list"></ul>
+			</section>
 
-      <ul id="contacts-list"></ul>
-    </section>
+			<section id="contacts" class="hide-content">
+				<h3>
+					Contacts
+					<button id="contacts-detail-btn">
+						<i data-feather="plus"></i>
+					</button>
+				</h3>
 
-    <div id="add-contact-modal" class="closed">
-      <button id="contact-modal-close"><i data-feather="x"></i></button>
+				<ul id="contacts-list"></ul>
+			</section>
 
-      <ul id="contacts"></ul>
+			<div id="add-contact-modal" class="closed">
+				<button id="contact-modal-close">
+					<i data-feather="x"></i>
+				</button>
 
-      <form id="contact-form">
-        <label for="contact-input">
-          <i data-feather="search" width="16" height="16"></i>
-          <span>nickname</span>
-        </label>
-        <input type="text" id="contact-input" />
+				<ul id="contacts"></ul>
 
-        <input type="submit" value="add contact" />
-      </form>
-    </div>
+				<form id="contact-form">
+					<label for="contact-input">
+						<i data-feather="search" width="16" height="16"></i>
+						<span>nickname</span>
+					</label>
+					<input type="text" id="contact-input" />
 
-    <div id="room-area" class="closed">
-      <button id="room-close"><i data-feather="x"></i></button>
-      <h2 id="room-title"></h2>
+					<input type="submit" value="add contact" />
+				</form>
+			</div>
 
-      <span>participants</span>
-      <ul id="room-users"></ul>
+			<div id="room-area" class="closed">
+				<button id="room-close"><i data-feather="x"></i></button>
+				<h2 id="room-title"></h2>
 
-      <div>
-        <ul id="messages-area"></ul>
-      </div>
+				<span>participants</span>
+				<ul id="room-users"></ul>
 
-      <form id="send-message-form">
-        <input type="text" id="message-input" placeholder="type here" />
-        <button>Send</button>
-      </form>
-    </div>
-    <!-- prettier-ignore -->
-    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-    <script type="module" src="./app.mjs"></script>
-  </body>
+				<div>
+					<ul id="messages-area"></ul>
+				</div>
+
+				<form id="send-message-form">
+					<input
+						type="text"
+						id="message-input"
+						placeholder="type here"
+					/>
+					<button>Send</button>
+				</form>
+			</div>
+		</div>
+		<!-- prettier-ignore -->
+		<script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+		<script type="module" src="./app.mjs"></script>
+	</body>
 </html>

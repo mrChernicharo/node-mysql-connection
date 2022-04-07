@@ -15,16 +15,22 @@ let user;
 let currentRoom = null;
 const newRoomContacts = [];
 
-// Landing
+// Header
 const headerNick = document.querySelector('#nick-display');
 const roomsList = document.querySelector('#rooms-list');
 const contactsList = document.querySelector('#contacts-list');
+
+// Nav-tabs
+const tabs = document.querySelector('#tabs');
+
 // ContactModal
+const contactsSection = document.querySelector('section#contacts');
 const contactModal = document.querySelector('#add-contact-modal');
 const contactDetailBtn = document.querySelector('#contacts-detail-btn');
 const contactForm = document.querySelector('#contact-form');
 const contactSearchInput = document.querySelector('#contact-input');
 // RoomArea
+const roomsSection = document.querySelector('section#rooms');
 const roomArea = document.querySelector('#room-area');
 const roomTitle = document.querySelector('#room-title');
 const roomUsersList = document.querySelector('#room-users');
@@ -41,6 +47,7 @@ const createNewRoomCloseBtn = document.querySelector('#create-room-close');
 const contactsSelect = document.querySelector('#create-room-contacts-select');
 const createRoomForm = document.querySelector('#create-room-form');
 const roomNameInput = document.querySelector('#room-name');
+
 // Landing
 await initPage();
 
@@ -49,13 +56,11 @@ await appendListeners();
 async function initPage() {
 	const nickname = location.search.split('nickname=')[1];
 	user = await fetchUserByNick(nickname);
-
 	headerNick.textContent = user.nickname;
 
 	const rooms = await fetchRoomsByUser(user.id);
 	const contacts = await fetchUserContacts(user.id);
-	console.log(rooms)
-
+	console.log(rooms);
 
 	rooms.forEach(room => {
 		const li = document.createElement('li');
@@ -74,23 +79,29 @@ async function initPage() {
 
 	socket.on('server:broadcast:message', data => {
 		console.log('server:broadcast:message', data);
-		const { message_id: id, text, created_at: sent_at, user, user_id, room_id, room_name } = data;
+
+		const {
+			text,
+			message_id: id,
+			created_at: sent_at,
+			user,
+			user_id,
+			room_id,
+			room_name,
+		} = data;
+
 		const msg = {
-			id, text, sent_at, user
-		}
+			id,
+			text,
+			sent_at,
+			user,
+		};
 		appendMessage(msg);
 	});
 
 	socket.on('disconnect', () => {
-		console.log('disconnected', socket.id)
+		console.log('disconnected', socket.id);
 	});
-
-
-	// for (const room of rooms) {
-	// 	  socket.join(`${room.name}:${room.id}`)
-	// }
-	// console.log(`${room.name}:${room.id}`)
-
 }
 
 async function appendListeners() {
@@ -140,6 +151,31 @@ async function appendListeners() {
 
 		// await loadMessages();
 	});
+
+	Array.from(tabs.children).forEach(tab =>
+		tab.addEventListener('click', handleTabClick)
+	);
+
+	Array.from(contactsList.children).forEach(li => {
+		li.addEventListener('click', handleContactClick);
+	});
+}
+
+function handleContactClick(e) {
+	console.log(e);
+}
+
+function handleTabClick(e) {
+	console.log(e, e.target);
+	if (e.target.id === 'contacts-tab') {
+		document.querySelector('#contacts-tab').classList.add('active');
+		document.querySelector('#chats-tab').classList.remove('active');
+	} else if (e.target.id === 'chats-tab') {
+		document.querySelector('#chats-tab').classList.add('active');
+		document.querySelector('#contacts-tab').classList.remove('active');
+	}
+	roomsSection.classList.toggle('hide-content');
+	contactsSection.classList.toggle('hide-content');
 }
 
 async function enterRoom(room) {
@@ -174,7 +210,7 @@ async function loadMessages() {
 	messages
 		// .sort((a, b) => a.create_at - b.created_at)
 		.forEach(msg => {
-			appendMessage(msg)
+			appendMessage(msg);
 		});
 }
 
