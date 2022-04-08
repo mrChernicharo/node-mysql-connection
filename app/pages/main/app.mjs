@@ -128,6 +128,12 @@ async function appendListeners() {
 		if (contactData) {
 			// create contact
 			const contact = await createContact(user.id, contactData.id);
+
+			// create private room between user and contact
+			const room = await createRoom(user.id, `${user.nickname}:${contactData.nickname}`, [
+				{ id: contactData.id, nickname: contactData.nickname }
+			])
+			console.log('private room', { room })
 			const li = document.createElement('li');
 
 			li.textContent = contact.nickname;
@@ -267,6 +273,7 @@ async function populateContactsSelect() {
 function addContactToRoom(contact) {
 	const li = document.createElement('li');
 	li.textContent = contact.nickname;
+
 	newRoomContacts.push(contact);
 	selectedContactsList.appendChild(li);
 }

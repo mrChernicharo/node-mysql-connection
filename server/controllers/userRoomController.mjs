@@ -15,7 +15,7 @@ export class UserRoomController {
 
 	async getUserRooms({ userId }) {
 		const [response] = await db.execute(
-			`select r.id as id, r.\`name\` 
+			`select distinct r.id as id, r.\`name\` 
 			from user_room as ur
             left join user as u
             on u.id = ur.fk_user_id
