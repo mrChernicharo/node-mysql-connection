@@ -99,9 +99,19 @@ async function initPage() {
 		appendMessage(msg);
 	});
 
-	socket.on('server:private:room:created', data => {
-		console.log('server:private:room:created', data);
+	socket.on('server:private:room:created', room => {
+		console.log('server:private:room:created', room);
+
+		const { name } = room;
+
+		const contactNick = name
+			.split(':&:')
+			.find(str => str !== user.nickname);
+
 		refreshRoomsList();
+		const li = document.createElement('li');
+		li.textContent = contactNick;
+		contactsList.appendChild(li);
 	});
 
 	socket.on('disconnect', () => {
@@ -174,12 +184,6 @@ async function handleContactFormSubmit(e) {
 			[{ id: contactData.id, nickname: contactData.nickname }]
 		);
 
-		const li = document.createElement('li');
-		li.textContent = contact.nickname;
-		contactsList.appendChild(li);
-
-		refreshRoomsList();
-
 		// notify peer about contact and room creation
 		socket.emit('private:room:created', {
 			room,
@@ -216,21 +220,6 @@ async function enterRoom(room) {
 
 	refreshRoomParticipants(room);
 	loadMessages();
-}
-
-async function refreshRoomParticipants(room) {
-	currentRoom = { ...room };
-	const { id, name } = room;
-
-	const users = await fetchUsersByRoom(id);
-
-	roomTitle.textContent = name;
-	roomUsersList.innerHTML = '';
-	users.forEach(user => {
-		const li = document.createElement('li');
-		li.textContent = user.user;
-		roomUsersList.appendChild(li);
-	});
 }
 
 async function loadMessages() {
@@ -328,6 +317,21 @@ async function refreshRoomsList() {
 		li.textContent = room.name;
 		li.addEventListener('click', () => enterRoom(room));
 		roomsList.appendChild(li);
+	});
+}
+
+async function refreshRoomParticipants(room) {
+	currentRoom = { ...room };
+	const { id, name } = room;
+
+	const users = await fetchUsersByRoom(id);
+
+	roomTitle.textContent = name;
+	roomUsersList.innerHTML = '';
+	users.forEach(user => {
+		const li = document.createElement('li');
+		li.textContent = user.user;
+		roomUsersList.appendChild(li);
 	});
 }
 

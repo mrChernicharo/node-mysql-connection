@@ -55,8 +55,14 @@ io.on('connection', async socket => {
 			key => connectedUsers[key].nickname === contactData.nickname
 		);
 
+		if (contactSocket) {
+			// notify contact in case it's connected
+			io.sockets.sockets
+				.get(contactSocket)
+				.join(`${room.name}:${room.id}`);
+		}
+
 		socket.join(`${room.name}:${room.id}`);
-		io.sockets.sockets.get(contactSocket).join(`${room.name}:${room.id}`);
 
 		io.to(`${room.name}:${room.id}`).emit(
 			'server:private:room:created',
