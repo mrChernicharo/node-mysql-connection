@@ -78,7 +78,7 @@ async function initPage() {
 	socket.emit('user:connect', { user });
 
 	socket.on('server:broadcast:message', data => {
-		console.log('server:broadcast:message', data);
+		// console.log('server:broadcast:message', data);
 
 		const {
 			text,
@@ -97,6 +97,11 @@ async function initPage() {
 			user,
 		};
 		appendMessage(msg);
+	});
+
+	socket.on('server:private:room:created', data => {
+		console.log('server:private:room:created', data);
+		refreshRoomsList();
 	});
 
 	socket.on('disconnect', () => {
@@ -121,29 +126,7 @@ async function appendListeners() {
 		createRoomModal.classList.add('closed');
 	});
 
-	contactForm.addEventListener('submit', async e => {
-		e.preventDefault();
-		const contactData = await fetchUserByNick(contactSearchInput.value);
-
-		if (contactData) {
-			// create contact
-			const contact = await createContact(user.id, contactData.id);
-
-			// create private room between user and contact
-			const room = await createRoom(user.id, `${user.nickname}:${contactData.nickname}`, [
-				{ id: contactData.id, nickname: contactData.nickname }
-			])
-			console.log('private room', { room })
-			const li = document.createElement('li');
-
-			li.textContent = contact.nickname;
-			contactsList.appendChild(li);
-
-			// TODO send invitation logic...
-		} else {
-			console.log('user not found');
-		}
-	});
+	contactForm.addEventListener('submit', handleContactFormSubmit);
 	sendMessageForm.addEventListener('submit', async e => {
 		e.preventDefault();
 
@@ -152,7 +135,7 @@ async function appendListeners() {
 			currentRoom.id,
 			messageInput.value
 		);
-		console.log('created message!', data);
+		// console.log('created message!', data);
 		socket.emit('user:send:message', data);
 
 		// await loadMessages();
@@ -167,12 +150,53 @@ async function appendListeners() {
 	});
 }
 
+async function handleContactFormSubmit(e) {
+	e.preventDefault();
+
+	const contactExists = (await fetchUserContacts(user.id)).find(
+		contact => contact.nickname === contactSearchInput.value
+	);
+
+	if (contactExists) {
+		return alert('contact already added');
+	}
+
+	const contactData = await fetchUserByNick(contactSearchInput.value);
+
+	if (contactData) {
+		// create contact
+		const contact = await createContact(user.id, contactData.id);
+
+		// create private room between user and contact
+		const room = await createRoom(
+			user.id,
+			`${user.nickname}:&:${contactData.nickname}`,
+			[{ id: contactData.id, nickname: contactData.nickname }]
+		);
+
+		const li = document.createElement('li');
+		li.textContent = contact.nickname;
+		contactsList.appendChild(li);
+
+		refreshRoomsList();
+
+		// notify peer about contact and room creation
+		socket.emit('private:room:created', {
+			room,
+			contactData,
+		});
+
+		// TODO send invitation logic...
+	} else {
+		alert('user not found');
+	}
+}
+
 function handleContactClick(e) {
 	console.log(e);
 }
 
 function handleTabClick(e) {
-	console.log(e, e.target);
 	if (e.target.id === 'contacts-tab') {
 		document.querySelector('#contacts-tab').classList.add('active');
 		document.querySelector('#chats-tab').classList.remove('active');
@@ -289,7 +313,7 @@ async function handleCreateRoomSubmit(e) {
 		newRoomContacts
 	);
 	newRoomContacts.splice(0, newRoomContacts.length);
-	console.log('created new room!', createdRoom);
+	// console.log('created new room!', createdRoom);
 
 	refreshRoomsList();
 	createRoomModal.classList.toggle('closed');

@@ -37,9 +37,9 @@ userRoutes.get('/', async (req, res) => {
 userRoutes.post('/', async (req, res) => {
 	try {
 		const { nickname } = req.body;
-		console.log(req.body);
+		// console.log(req.body);
 		const data = await userController.createUser({ nickname });
-		console.log(data);
+		// console.log(data);
 
 		res.json(data).status(201);
 	} catch (err) {

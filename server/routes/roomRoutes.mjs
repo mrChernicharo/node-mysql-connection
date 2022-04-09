@@ -16,22 +16,19 @@ roomRoutes.get('/', async (req, res) => {
 	res.json(response);
 });
 
-// roomRoutes.get('/users/:roomId', async (req, res) => {
-// 	const { roomId } = req.params;
-
-// 	const response = await roomController.getRoomUsers({ roomId });
-
-// 	res.json(response);
-// });
-
 roomRoutes.post('/', async (req, res) => {
 	const { roomName, userId, contacts } = req.body;
 
+	// prettier-ignore
 	console.log('received roomName:', roomName, ' and userId: ', userId, ' other people in the room: ', contacts);
 
-	const response = await roomController.createRoom({ roomName, userId, contacts });
+	const response = await roomController.createRoom({
+		roomName,
+		userId,
+		contacts,
+	});
 
-	console.log('created room', response);
+	// console.log('created room', response);
 	res.json(response);
 });
 

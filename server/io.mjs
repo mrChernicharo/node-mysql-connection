@@ -16,7 +16,7 @@ const connectedUsers = {};
 // console.log(allRooms);
 
 io.on('connection', async socket => {
-	console.log('a user connected', socket.id);
+	// console.log('a user connected', socket.id);
 
 	socket.on('user:connect', async data => {
 		const { user } = data;
@@ -27,25 +27,41 @@ io.on('connection', async socket => {
 			userId: user.id,
 		});
 
-		console.log('userRooms', userRooms);
+		// console.log('userRooms', userRooms);
 
 		for (const room of userRooms) {
 			socket.join(`${room.name}:${room.id}`);
 		}
 
-		logStatus();
-		console.log(socket.rooms)
-
+		// logStatus();
+		console.log(socket.rooms);
 	});
 
 	socket.on('user:send:message', data => {
-		console.log('user:send:message', { data });
+		// console.log('user:send:message', { data });
 
-		const { room_name, room_id } = data
-		console.log(`${room_name}:${room_id}`)
+		const { room_name, room_id } = data;
+		console.log(`${room_name}:${room_id}`);
 
-		io.to(`${room_name}:${room_id}`).emit('server:broadcast:message', data)
+		io.to(`${room_name}:${room_id}`).emit('server:broadcast:message', data);
+	});
 
+	socket.on('private:room:created', data => {
+		console.log('private:room:created', data);
+
+		const { room, contactData } = data;
+
+		const contactSocket = Object.keys(connectedUsers).find(
+			key => connectedUsers[key].nickname === contactData.nickname
+		);
+
+		socket.join(`${room.name}:${room.id}`);
+		io.sockets.sockets.get(contactSocket).join(`${room.name}:${room.id}`);
+
+		io.to(`${room.name}:${room.id}`).emit(
+			'server:private:room:created',
+			room
+		);
 	});
 
 	socket.on('disconnect', () => {
