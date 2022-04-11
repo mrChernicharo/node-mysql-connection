@@ -70,6 +70,24 @@ io.on('connection', async socket => {
 		);
 	});
 
+	socket.on('message:typing', (room, user) => {
+		socket.broadcast
+			.to(`${room.name}:${room.id}`)
+			.emit('server:message:typing', {
+				user: user.nickname,
+				room,
+			});
+	});
+
+	socket.on('message:stopped:typing', (room, user) => {
+		socket.broadcast
+			.to(`${room.name}:${room.id}`)
+			.emit('server:message:stopped:typing', {
+				user: user.nickname,
+				room,
+			});
+	});
+
 	socket.on('disconnect', () => {
 		console.log('disconnecting user', connectedUsers[socket.id]);
 

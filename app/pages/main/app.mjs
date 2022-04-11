@@ -14,6 +14,7 @@ import { socket } from '../../utils/socket.mjs';
 let user;
 let currentRoom = null;
 const newRoomContacts = [];
+let isTyping = false;
 
 // Header
 const headerNick = document.querySelector('#nick-display');
@@ -37,8 +38,11 @@ const roomUsersList = document.querySelector('#room-users');
 const roomCloseBtn = document.querySelector('#room-close');
 const contactModalCloseBtn = document.querySelector('#contact-modal-close');
 const messagesArea = document.querySelector('#messages-area');
+const messagesList = document.querySelector('#messages-list');
 const sendMessageForm = document.querySelector('#send-message-form');
 const messageInput = document.querySelector('#message-input');
+const typingIndicator = document.querySelector('#typing-indicator');
+
 // prettier-ignore
 const selectedContactsList = document.querySelector('#create-room-selected-contacts');
 const createRoomModal = document.querySelector('#create-room-modal');
@@ -114,6 +118,14 @@ async function initPage() {
 		contactsList.appendChild(li);
 	});
 
+	socket.on('server:message:typing', data => {
+		typingIndicator.textContent = '...';
+	});
+
+	socket.on('server:message:stopped:typing', data => {
+		typingIndicator.textContent = '';
+	});
+
 	socket.on('disconnect', () => {
 		console.log('disconnected', socket.id);
 	});
@@ -137,19 +149,10 @@ async function appendListeners() {
 	});
 
 	contactForm.addEventListener('submit', handleContactFormSubmit);
-	sendMessageForm.addEventListener('submit', async e => {
-		e.preventDefault();
 
-		const data = await createMessage(
-			user.id,
-			currentRoom.id,
-			messageInput.value
-		);
-		// console.log('created message!', data);
-		socket.emit('user:send:message', data);
+	sendMessageForm.addEventListener('submit', handleMessageSubmit);
 
-		// await loadMessages();
-	});
+	messageInput.addEventListener('input', handleTyping);
 
 	Array.from(tabs.children).forEach(tab =>
 		tab.addEventListener('click', handleTabClick)
@@ -158,6 +161,30 @@ async function appendListeners() {
 	Array.from(contactsList.children).forEach(li => {
 		li.addEventListener('click', handleContactClick);
 	});
+}
+
+function handleTyping(e) {
+	if (messageInput.value && !isTyping) {
+		isTyping = true;
+		socket.emit('message:typing', currentRoom, user);
+	} else if (!messageInput.value && isTyping) {
+		isTyping = false;
+		socket.emit('message:stopped:typing', currentRoom, user);
+	}
+}
+
+async function handleMessageSubmit(e) {
+	e.preventDefault();
+
+	const data = await createMessage(
+		user.id,
+		currentRoom.id,
+		messageInput.value
+	);
+	// console.log('created message!', data);
+	socket.emit('user:send:message', data);
+	socket.emit('message:stopped:typing', currentRoom, user);
+	messageInput.value = '';
 }
 
 async function handleContactFormSubmit(e) {
@@ -227,7 +254,7 @@ async function enterRoom(room) {
 async function loadMessages() {
 	const messages = await fetchRoomMessages(currentRoom.id);
 
-	messagesArea.innerHTML = '';
+	messagesList.innerHTML = '';
 	messages
 		// .sort((a, b) => a.create_at - b.created_at)
 		.forEach(msg => {
@@ -257,7 +284,7 @@ function appendMessage(msg) {
 		: li.classList.add('contact');
 	li.classList.add('message');
 
-	messagesArea.appendChild(li);
+	messagesList.appendChild(li);
 }
 
 async function handleCreateNewRoom() {
