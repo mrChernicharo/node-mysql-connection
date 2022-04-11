@@ -6,4 +6,4 @@
 # TODOS
 
 -   room lastMessage
--   is writing
+-   socket room creation

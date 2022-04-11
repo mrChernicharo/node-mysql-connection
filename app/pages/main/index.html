@@ -40,7 +40,7 @@
 				</button>
 
 				<div id="create-room-modal" class="closed">
-					<button id="create-room-close">
+					<button id="create-room-close" class="x-btn">
 						<i data-feather="x"></i>
 					</button>
 
@@ -55,7 +55,11 @@
 
 						<ul id="create-room-contacts-select"></ul>
 
-						<input type="submit" value="Create Room" />
+						<input
+							type="submit"
+							value="Create Room"
+							class="app-btn"
+						/>
 					</form>
 				</div>
 
@@ -71,7 +75,7 @@
 			</section>
 
 			<div id="add-contact-modal" class="closed">
-				<button id="contact-modal-close">
+				<button id="contact-modal-close" class="x-btn">
 					<i data-feather="x"></i>
 				</button>
 
@@ -84,20 +88,21 @@
 					</label>
 					<input type="text" id="contact-input" />
 
-					<input type="submit" value="add contact" />
+					<input type="submit" value="add contact" class="app-btn" />
 				</form>
 			</div>
 
 			<div id="room-area" class="closed">
-				<button id="room-close"><i data-feather="x"></i></button>
+				<button id="room-close" class="x-btn">
+					<i data-feather="x"></i>
+				</button>
 				<h2 id="room-title"></h2>
 
-				<span>participants</span>
 				<ul id="room-users"></ul>
 
 				<div id="messages-area">
-					<ul id="messages-list"></ul>
 					<div id="typing-indicator"></div>
+					<ul id="messages-list"></ul>
 				</div>
 
 				<form id="send-message-form">
@@ -106,7 +111,7 @@
 						id="message-input"
 						placeholder="type here"
 					/>
-					<button>Send</button>
+					<button class="app-btn">Send</button>
 				</form>
 			</div>
 		</div>

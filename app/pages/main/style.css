@@ -31,12 +31,51 @@ li:hover {
 	background-color: #eee;
 }
 
+button,
+input[type='submit'] {
+	background-color: var(--primary);
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	transition: opacity 0.2s;
+}
+
+button.app-btn,
+input.app-btn {
+	padding: 0.5rem;
+	font-size: 16px;
+	/* letter-spacing: 0.5px; */
+}
+
+button#add-new-chat-btn,
+button#add-new-contact-btn {
+	position: absolute;
+	bottom: 2rem;
+	right: 2rem;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+}
+
+button.x-btn {
+	background-color: transparent;
+	color: #000;
+}
+
+button:hover {
+	opacity: 0.7;
+}
+
 div#page-container {
 	background-color: #fff;
 	margin: 0 auto;
 	max-width: 786px;
 	min-height: 100vh;
 }
+
+/********************************/
+/*********** Header *************/
+/********************************/
 
 header {
 	display: flex;
@@ -48,6 +87,10 @@ header > div {
 	display: flex;
 	align-items: center;
 }
+
+/*****************************/
+/*********** Nav *************/
+/*****************************/
 
 nav#tabs {
 	display: flex;
@@ -73,8 +116,7 @@ nav#tabs > div.nav-tab:first-child {
 }
 
 #rooms-list {
-	border: 1px solid;
-	padding: 1rem;
+	padding-inline: 1rem;
 }
 
 #create-room-modal {
@@ -92,18 +134,19 @@ nav#tabs > div.nav-tab:first-child {
 	top: 0;
 	right: 0;
 	height: 100vh;
+	width: 420px;
 }
 
 #messages-area {
 	background-color: #fff;
 	border: 1px solid;
 	padding-block: 1rem;
-	height: calc(100vh - 240px);
-	width: min(100%, 500px);
+	height: calc(100vh - 222px);
 	display: flex;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	overflow-y: scroll;
 }
+
 li.user.message {
 	margin-right: auto;
 }
@@ -122,6 +165,29 @@ li.message > .date-div {
 	font-size: 0.8rem;
 }
 
+li.message > .text-div {
+	/* border: 1px solid red; */
+	word-wrap: break-word;
+}
+
+#send-message-form {
+	/* border: 1px solid; */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.25rem;
+	padding-top: 0.5rem;
+}
+
+input#message-input {
+	line-height: 1.6rem;
+	width: 100%;
+	border-radius: 6px;
+	padding-left: 0.5rem;
+	margin: 0.25rem;
+	margin-right: 0.5rem;
+}
+
 #add-contact-modal.closed,
 #create-room-modal.closed,
 #room-area.closed {
@@ -132,18 +198,9 @@ li.message > .date-div {
 	display: none;
 }
 
-button#add-new-chat-btn,
-button#add-new-contact-btn {
-	position: absolute;
-	bottom: 2rem;
-	right: 2rem;
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-}
-
 #typing-indicator {
 	width: 40px;
 	height: 10px;
-	padding: 0.5rem 0.5rem 0.2rem;
+	padding: 0.5rem 0 1.25rem 0.3rem;
+	/* padding: 0.5rem 0.5rem 0.2rem; */
 }
