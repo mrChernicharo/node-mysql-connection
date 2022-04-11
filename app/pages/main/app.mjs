@@ -26,7 +26,7 @@ const tabs = document.querySelector('#tabs');
 // ContactModal
 const contactsSection = document.querySelector('section#contacts');
 const contactModal = document.querySelector('#add-contact-modal');
-const contactDetailBtn = document.querySelector('#contacts-detail-btn');
+const contactDetailBtn = document.querySelector('#add-new-contact-btn');
 const contactForm = document.querySelector('#contact-form');
 const contactSearchInput = document.querySelector('#contact-input');
 // RoomArea
@@ -42,7 +42,7 @@ const messageInput = document.querySelector('#message-input');
 // prettier-ignore
 const selectedContactsList = document.querySelector('#create-room-selected-contacts');
 const createRoomModal = document.querySelector('#create-room-modal');
-const createNewRoomBtn = document.querySelector('#rooms-detail-btn');
+const createNewRoomBtn = document.querySelector('#add-new-chat-btn');
 const createNewRoomCloseBtn = document.querySelector('#create-room-close');
 const contactsSelect = document.querySelector('#create-room-contacts-select');
 const createRoomForm = document.querySelector('#create-room-form');
@@ -64,7 +64,7 @@ async function initPage() {
 
 	rooms.forEach(room => {
 		const li = document.createElement('li');
-		li.textContent = room.name;
+		li.textContent = getRoomName(room);
 		li.addEventListener('click', () => enterRoom(room));
 		roomsList.appendChild(li);
 	});
@@ -204,12 +204,14 @@ function handleTabClick(e) {
 	if (e.target.id === 'contacts-tab') {
 		document.querySelector('#contacts-tab').classList.add('active');
 		document.querySelector('#chats-tab').classList.remove('active');
+		contactsSection.classList.remove('hide-content');
+		roomsSection.classList.add('hide-content');
 	} else if (e.target.id === 'chats-tab') {
 		document.querySelector('#chats-tab').classList.add('active');
 		document.querySelector('#contacts-tab').classList.remove('active');
+		roomsSection.classList.remove('hide-content');
+		contactsSection.classList.add('hide-content');
 	}
-	roomsSection.classList.toggle('hide-content');
-	contactsSection.classList.toggle('hide-content');
 }
 
 async function enterRoom(room) {
@@ -314,7 +316,7 @@ async function refreshRoomsList() {
 	roomsList.innerHTML = '';
 	rooms.forEach(room => {
 		const li = document.createElement('li');
-		li.textContent = room.name;
+		li.textContent = getRoomName(room);
 		li.addEventListener('click', () => enterRoom(room));
 		roomsList.appendChild(li);
 	});
@@ -322,17 +324,29 @@ async function refreshRoomsList() {
 
 async function refreshRoomParticipants(room) {
 	currentRoom = { ...room };
-	const { id, name } = room;
+	// const { id, name } = room;
 
-	const users = await fetchUsersByRoom(id);
+	const users = await fetchUsersByRoom(room.id);
 
-	roomTitle.textContent = name;
+	roomTitle.textContent = getRoomName(room);
 	roomUsersList.innerHTML = '';
+
 	users.forEach(user => {
 		const li = document.createElement('li');
 		li.textContent = user.user;
 		roomUsersList.appendChild(li);
 	});
+}
+
+function getRoomName(room) {
+	if (room.name.includes(':&:')) {
+		const names = room.name.split(':&:');
+		const roomName = names[0] === user.nickname ? names[1] : names[0];
+		console.log({ names, roomName, user });
+		return roomName;
+	} else {
+		return room.name;
+	}
 }
 
 feather.replace();

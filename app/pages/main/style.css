@@ -131,3 +131,13 @@ li.message > .date-div {
 .hide-content {
 	display: none;
 }
+
+button#add-new-chat-btn,
+button#add-new-contact-btn {
+	position: absolute;
+	bottom: 2rem;
+	right: 2rem;
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+}
