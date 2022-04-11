@@ -41,7 +41,10 @@ const messagesArea = document.querySelector('#messages-area');
 const messagesList = document.querySelector('#messages-list');
 const sendMessageForm = document.querySelector('#send-message-form');
 const messageInput = document.querySelector('#message-input');
-const typingIndicator = document.querySelector('#typing-indicator');
+const typingIndicatorDiv = document.querySelector('#typing-indicator');
+const typingIndicator = document.createElement('img');
+typingIndicator.setAttribute('id', 'typing-indicator');
+typingIndicator.src = '../../assets/827.svg';
 
 // prettier-ignore
 const selectedContactsList = document.querySelector('#create-room-selected-contacts');
@@ -119,11 +122,13 @@ async function initPage() {
 	});
 
 	socket.on('server:message:typing', data => {
-		typingIndicator.textContent = '...';
+		// typingIndicatorDiv.textContent = '...';
+		typingIndicatorDiv.appendChild(typingIndicator);
 	});
 
 	socket.on('server:message:stopped:typing', data => {
-		typingIndicator.textContent = '';
+		// typingIndicatorDiv.textContent = '';
+		typingIndicatorDiv.removeChild(typingIndicator);
 	});
 
 	socket.on('disconnect', () => {
