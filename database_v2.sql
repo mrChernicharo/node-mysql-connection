@@ -30,14 +30,7 @@ create table chat(
     
     constraint pk_chat_id primary key(id)
 );
--- 1:1
--- create table chat_last_message(
--- 	id int auto_increment,
--- 	message int default null
 
--- 	constraint pk_chat_last_message_id primary key(id)
--- )
--- user n:n chat
 create table user_chat (
     id int auto_increment,
     fk_user_id int not null,
@@ -61,6 +54,7 @@ create table message(
     created_at datetime,
     fk_user_id int not null,
     fk_chat_id int not null,
+	is_last enum('y', 'n') default 'n',
     
     constraint pk_message_id primary key(id)
 );
@@ -74,8 +68,8 @@ add constraint fk_message_user_id foreign key(fk_user_id) references `user`(id);
 alter table message
 add constraint fk_message_chat_id foreign key(fk_chat_id) references chat(id);
 
-alter table chat_last_message
-add constraint fk_chat_last_message_id foreign key(fk_chat_id) references chat(id);
+-- alter table chat_last_message
+-- add constraint fk_chat_last_message_id foreign key(fk_chat_id) references chat(id);
 
 alter table user_chat
 add constraint fk_user_chat_user_id foreign key(fk_user_id) references `user`(id);
@@ -99,21 +93,25 @@ desc message;
 desc user_chat;
 desc contact;
 
+select * from user;
+select * from chat;
+select * from user_chat;
+select * from contact;
+select * from message;
+
+
 -- insert some data
 
-insert into `user`(nickname, created_at) values 
-    ('Felipe', current_timestamp),
-    ('Mari', addtime(current_timestamp, '00:10:000001')),
-    ('Edna', addtime(current_timestamp, '00:14:000001')),
-    ('Gabriel',addtime(current_timestamp, '01:20:000001')),
-    ('Mike Campbel', addtime(current_timestamp, '01:30:00')),
-    ('Pancho Amat', addtime(current_timestamp, '03:50:00'));
+insert into `user`(nickname, email, avatar_url, created_at) values 
+    ('Felipe', 'fel.chernicha@gmagal.com', 'https://www.ljproducaoartistica.com.br/wp-content/uploads/2019/08/WhatsApp-Image-2019-08-27-at-21.50.49-300x300.jpeg',current_timestamp),
+    ('Mari', 'mari@uol.com.br' ,'https://blogs.iadb.org/energia/wp-content/uploads/sites/16/2020/07/Mariana-Weiss-Perfil.png',subtime(current_timestamp, '00:10:000001')),
+    ('Pancho Amat', 'panchito3@gmail.com', 'https://3.bp.blogspot.com/-zZe_6inZcdY/WaAyjvmmJuI/AAAAAAAAScA/jwK08BpzhmY3bNFEjzVFdN5IqzbE1wZ5gCK4BGAYYCw/s160/Pancho-Amat-y-su-tres.jpg',subtime(current_timestamp, '03:50:00'));
 
 
-insert into chat(`name`, created_at) values
-    ('Family', addtime(current_timestamp, '01:20:000001')),
-    ('CPII', addtime(current_timestamp, '01:30:00')),
-    ('Professional', addtime(current_timestamp, '01:50:00'));
+insert into chat(`name`, img_url, created_at) values
+    ('Family', 'https://th.bing.com/th/id/OIP.fjczpAdrLES0qGAz83su2QHaHg?pid=ImgDet&rs=1&w=140', addtime(current_timestamp, '01:20:000001')),
+    ('CPII', 'https://th.bing.com/th/id/OIP.Bk3klWHEzCoPt1ZijO8DIAHaJE?pid=ImgDet&rs=1&w=100', addtime(current_timestamp, '01:30:00')),
+    ('Professional', 'https://www.digitalmovement.com.au/wp-content/uploads/2020/02/Plan-1.png', addtime(current_timestamp, '01:50:00'));
 
 
 insert into user_chat (fk_user_id, fk_chat_id, joined_at) values
@@ -319,3 +317,5 @@ set foreign_key_checks = 1;
 update chat set created_at = subtime(created_at, '10:00:00');
 
 drop database zchat;
+drop table chat;
+drop table message;
