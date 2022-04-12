@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="shortcut icon"
-			href="../../assets/js.svg"
-			type="image/x-icon"
-		/>
-		<script src="https://unpkg.com/feather-icons"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../../assets/js.svg" type="image/x-icon" />
+    <script src="https://unpkg.com/feather-icons"></script>
 
-		<title>Chat App</title>
-		<style>
-			body {
-				font-family: 'Courier New', Courier, monospace;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Chat App <i data-feather="sun"></i></h1>
+    <link rel="stylesheet" href="../../styles/global.css" />
+    <link rel="stylesheet" href="login.css" />
 
-		<form id="nick-form">
-			<label for="nick-input">Nickname</label>
-			<input
-				type="text"
-				id="nick-input"
-				placeholder="enter your nickname"
-			/>
-			<button>Register</button>
-		</form>
+    <title>Chat App</title>
+    <style>
+      body {
+        font-family: "Courier New", Courier, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="page-container">
+      <header>
+        <div>
+          <i data-feather="message-square"></i>
+          <span>zChat</span>
+        </div>
+      </header>
 
-		<p>Start chatting with random people now</p>
+      <div>
+        <h1>Register</h1>
+        <p>and start chatting in less than one minute</p>
+      </div>
 
-		<!-- prettier-ignore -->
-		<script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-		<script type="module" src="./login.mjs"></script>
-	</body>
+      <form id="nick-form">
+        <input type="email" id="email-input" placeholder="Email" />
+        <input type="text" id="nick-input" placeholder="Nickname" />
+        <button class="app-btn">Register</button>
+      </form>
+
+      <!-- prettier-ignore -->
+      <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+      <script type="module" src="./login.mjs"></script>
+    </div>
+  </body>
 </html>
