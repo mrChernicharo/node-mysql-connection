@@ -1,122 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link
-			rel="shortcut icon"
-			href="../../assets/js.svg"
-			type="image/x-icon"
-		/>
-		<link rel="stylesheet" href="style.css" />
-		<script src="https://unpkg.com/feather-icons"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../../assets/js.svg" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/feather-icons"></script>
 
-		<title>Chat App</title>
-	</head>
-	<body>
-		<div id="page-container">
-			<header>
-				<div>
-					<i data-feather="message-square"></i>
-					<span>zChat</span>
-				</div>
+    <title>Chat App</title>
+  </head>
+  <body>
+    <div id="page-container">
+      <header>
+        <div>
+          <i data-feather="message-square"></i>
+          <span>zChat</span>
+        </div>
 
-				<div>
-					<span id="nick-display"></span>
-					<i data-feather="user"></i>
-					<i data-feather="more-vertical"></i>
-				</div>
-			</header>
+        <div>
+          <span id="nick-display"></span>
+          <i data-feather="user"></i>
+          <i data-feather="more-vertical"></i>
+        </div>
+      </header>
 
-			<nav id="tabs">
-				<div id="chats-tab" class="nav-tab active">Chats</div>
-				<div id="contacts-tab" class="nav-tab">Contacts</div>
-			</nav>
+      <nav id="tabs">
+        <div id="chats-tab" class="nav-tab active">Chats</div>
+        <div id="contacts-tab" class="nav-tab">Contacts</div>
+      </nav>
 
-			<section id="rooms">
-				<button id="add-new-chat-btn" title="add new chat">
-					<i data-feather="plus"></i>
-				</button>
+      <section id="rooms">
+        <button id="add-new-chat-btn" title="add new chat">
+          <i data-feather="plus"></i>
+        </button>
 
-				<div id="create-room-modal" class="closed">
-					<button id="create-room-close" class="x-btn">
-						<i data-feather="x"></i>
-					</button>
+        <ul id="rooms-list"></ul>
 
-					<h1>create new room</h1>
-					<form id="create-room-form">
-						<label for="room-name"
-							>how should we call this room?</label
-						>
-						<input type="text" id="room-name" />
+        <div id="create-room-modal" class="closed">
+          <button id="create-room-close" class="x-btn">
+            <i data-feather="x"></i>
+          </button>
 
-						<ul id="create-room-selected-contacts"></ul>
+          <h1>create new room</h1>
+          <form id="create-room-form">
+            <input
+              type="text"
+              id="room-name-input"
+              placeholder="how should we call this room?"
+            />
 
-						<ul id="create-room-contacts-select"></ul>
+            <input type="submit" value="Create Room" class="app-btn" />
 
-						<input
-							type="submit"
-							value="Create Room"
-							class="app-btn"
-						/>
-					</form>
-				</div>
+            <ul id="create-room-selected-contacts"></ul>
+            <ul id="create-room-contacts-select"></ul>
+          </form>
+        </div>
+      </section>
 
-				<ul id="rooms-list"></ul>
-			</section>
+      <section id="contacts" class="hide-content">
+        <button id="add-new-contact-btn">
+          <i data-feather="plus"></i>
+        </button>
 
-			<section id="contacts" class="hide-content">
-				<button id="add-new-contact-btn">
-					<i data-feather="plus"></i>
-				</button>
+        <ul id="contacts-list"></ul>
+      </section>
 
-				<ul id="contacts-list"></ul>
-			</section>
+      <div id="add-contact-modal" class="closed">
+        <button id="contact-modal-close" class="x-btn">
+          <i data-feather="x"></i>
+        </button>
 
-			<div id="add-contact-modal" class="closed">
-				<button id="contact-modal-close" class="x-btn">
-					<i data-feather="x"></i>
-				</button>
+        <ul id="contacts"></ul>
 
-				<ul id="contacts"></ul>
+        <form id="add-contact-form">
+          <input type="text" id="add-contact-input" />
 
-				<form id="contact-form">
-					<label for="contact-input">
-						<i data-feather="search" width="16" height="16"></i>
-						<span>nickname</span>
-					</label>
-					<input type="text" id="contact-input" />
+          <input type="submit" value="add contact" class="app-btn" />
+        </form>
+      </div>
 
-					<input type="submit" value="add contact" class="app-btn" />
-				</form>
-			</div>
+      <div id="room-area" class="closed">
+        <button id="room-close" class="x-btn">
+          <i data-feather="x"></i>
+        </button>
+        <h2 id="room-title"></h2>
 
-			<div id="room-area" class="closed">
-				<button id="room-close" class="x-btn">
-					<i data-feather="x"></i>
-				</button>
-				<h2 id="room-title"></h2>
+        <ul id="room-users"></ul>
 
-				<ul id="room-users"></ul>
+        <div id="messages-area">
+          <div id="typing-indicator"></div>
+          <ul id="messages-list"></ul>
+        </div>
 
-				<div id="messages-area">
-					<div id="typing-indicator"></div>
-					<ul id="messages-list"></ul>
-				</div>
-
-				<form id="send-message-form">
-					<input
-						type="text"
-						id="message-input"
-						placeholder="type here"
-					/>
-					<button class="app-btn">Send</button>
-				</form>
-			</div>
-		</div>
-		<!-- prettier-ignore -->
-		<script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
-		<script type="module" src="./app.mjs"></script>
-	</body>
+        <form id="send-message-form">
+          <input type="text" id="message-input" placeholder="type here" />
+          <button class="app-btn">Send</button>
+        </form>
+      </div>
+    </div>
+    <!-- prettier-ignore -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <script type="module" src="./app.mjs"></script>
+  </body>
 </html>

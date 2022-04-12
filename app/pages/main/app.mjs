@@ -28,8 +28,8 @@ const tabs = document.querySelector('#tabs');
 const contactsSection = document.querySelector('section#contacts');
 const contactModal = document.querySelector('#add-contact-modal');
 const contactDetailBtn = document.querySelector('#add-new-contact-btn');
-const contactForm = document.querySelector('#contact-form');
-const contactSearchInput = document.querySelector('#contact-input');
+const contactForm = document.querySelector('#add-contact-form');
+const contactSearchInput = document.querySelector('#add-contact-input');
 // RoomArea
 const roomsSection = document.querySelector('section#rooms');
 const roomArea = document.querySelector('#room-area');
@@ -67,19 +67,14 @@ async function initPage() {
 
 	const rooms = await fetchRoomsByUser(user.id);
 	const contacts = await fetchUserContacts(user.id);
-	console.log(rooms);
+	console.log({ rooms });
 
 	rooms.forEach(room => {
-		const li = document.createElement('li');
-		li.textContent = getRoomName(room);
-		li.addEventListener('click', () => enterRoom(room));
-		roomsList.appendChild(li);
+		appendRoom(room)
 	});
 
 	contacts.forEach(contact => {
-		const li = document.createElement('li');
-		li.textContent = contact.nickname;
-		contactsList.appendChild(li);
+		appendContact(contact)
 	});
 
 	socket.emit('user:connect', { user });
@@ -122,12 +117,10 @@ async function initPage() {
 	});
 
 	socket.on('server:message:typing', data => {
-		// typingIndicatorDiv.textContent = '...';
 		typingIndicatorDiv.appendChild(typingIndicator);
 	});
 
 	socket.on('server:message:stopped:typing', data => {
-		// typingIndicatorDiv.textContent = '';
 		typingIndicatorDiv.removeChild(typingIndicator);
 	});
 
@@ -140,15 +133,19 @@ async function appendListeners() {
 	contactDetailBtn.addEventListener('click', e => {
 		contactModal.classList.toggle('closed');
 	});
+
 	contactModalCloseBtn.addEventListener('click', e => {
 		contactModal.classList.add('closed');
 	});
+
 	roomCloseBtn.addEventListener('click', e => {
 		roomArea.classList.add('closed');
 	});
+
 	createNewRoomBtn.addEventListener('click', async e => {
 		handleCreateNewRoom();
 	});
+
 	createNewRoomCloseBtn.addEventListener('click', e => {
 		createRoomModal.classList.add('closed');
 	});
@@ -228,6 +225,15 @@ async function handleContactFormSubmit(e) {
 	}
 }
 
+
+async function handleCreateNewRoom() {
+	createRoomModal.classList.toggle('closed');
+	populateContactsSelect();
+
+	createRoomForm.addEventListener('submit', handleCreateRoomSubmit);
+}
+
+
 function handleContactClick(e) {
 	console.log(e);
 }
@@ -265,38 +271,6 @@ async function loadMessages() {
 		.forEach(msg => {
 			appendMessage(msg);
 		});
-}
-
-function appendMessage(msg) {
-	const li = document.createElement('li');
-	// prettier-ignore
-	const messageComponentClasses = ['author-div', 'text-div', 'date-div'];
-	const authorDiv = document.createElement('div');
-	const textDiv = document.createElement('div');
-	const dateDiv = document.createElement('div');
-
-	authorDiv.textContent = msg.user;
-	textDiv.textContent = msg.text;
-	dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
-
-	[authorDiv, textDiv, dateDiv].forEach((el, i) => {
-		el.setAttribute('class', messageComponentClasses[i]);
-		li.appendChild(el);
-	});
-
-	msg.user === user.nickname
-		? li.classList.add('user')
-		: li.classList.add('contact');
-	li.classList.add('message');
-
-	messagesList.appendChild(li);
-}
-
-async function handleCreateNewRoom() {
-	createRoomModal.classList.toggle('closed');
-	populateContactsSelect();
-
-	createRoomForm.addEventListener('submit', handleCreateRoomSubmit);
 }
 
 async function populateContactsSelect() {
@@ -347,10 +321,7 @@ async function refreshRoomsList() {
 
 	roomsList.innerHTML = '';
 	rooms.forEach(room => {
-		const li = document.createElement('li');
-		li.textContent = getRoomName(room);
-		li.addEventListener('click', () => enterRoom(room));
-		roomsList.appendChild(li);
+		appendRoom(room)
 	});
 }
 
@@ -370,6 +341,72 @@ async function refreshRoomParticipants(room) {
 	});
 }
 
+function appendMessage(msg) {
+	const li = document.createElement('li');
+	// prettier-ignore
+	const messageContainers = ['author-div', 'text-div', 'date-div'];
+	const authorDiv = document.createElement('div');
+	const textDiv = document.createElement('div');
+	const dateDiv = document.createElement('div');
+
+	authorDiv.textContent = msg.user;
+	textDiv.textContent = msg.text;
+	dateDiv.textContent = new Date(msg.sent_at).toLocaleString();
+
+	[authorDiv, textDiv, dateDiv].forEach((el, i) => {
+		el.setAttribute('class', messageContainers[i]);
+		li.appendChild(el);
+	});
+
+	msg.user === user.nickname
+		? li.classList.add('user')
+		: li.classList.add('contact');
+	li.classList.add('message');
+
+	messagesList.appendChild(li);
+}
+
+
+function appendRoom(room) {
+	console.log(room)
+
+	const li = document.createElement('li');
+	const avatarDiv = document.createElement('div');
+	const avatarImg = document.createElement('img');
+	const mainContentDiv = document.createElement('div');
+	const roomNameDiv = document.createElement('div');
+	const lastMessage = document.createElement('div');
+	const timeSentDiv = document.createElement('div');
+
+	avatarDiv.classList.add('avatar')
+	avatarImg.src = 'https://th.bing.com/th/id/OIP.mvS0zUzAKGbdr3HgttTqRwHaFk?pid=ImgDet&w=185&h=139.3404255319149&c=7';
+	avatarImg.width = 42;
+	avatarImg.height = 42;
+	mainContentDiv.classList.add('room-main')
+	roomNameDiv.textContent = getRoomName(room);
+	timeSentDiv.classList.add('time-sent')
+	timeSentDiv.textContent = '11:59'
+
+
+	avatarDiv.appendChild(avatarImg)
+	mainContentDiv.appendChild(roomNameDiv)
+	mainContentDiv.appendChild(lastMessage)
+	li.appendChild(avatarDiv)
+	li.appendChild(mainContentDiv)
+	li.appendChild(timeSentDiv)
+
+
+	roomsList.appendChild(li);
+	li.addEventListener('click', () => enterRoom(room));
+
+}
+
+function appendContact(contact) {
+	const li = document.createElement('li');
+	li.textContent = contact.nickname;
+	contactsList.appendChild(li);
+}
+
 function getRoomName(room) {
 	if (room.name.includes(':&:')) {
 		const names = room.name.split(':&:');
@@ -380,5 +417,6 @@ function getRoomName(room) {
 		return room.name;
 	}
 }
+
 
 feather.replace();

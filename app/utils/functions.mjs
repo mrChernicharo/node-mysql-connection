@@ -19,7 +19,7 @@ async function fetchUserByNick(nickname) {
 		`http://localhost:3333/user/nick?nickname=${nickname}`
 	);
 	const data = await res.json();
-	console.log({ data });
+	// console.log({ data });
 
 	return data;
 }
@@ -69,7 +69,7 @@ async function fetchUsersByRoom(roomId) {
 async function fetchUserContacts(userId) {
 	const res = await fetch(`http://localhost:3333/contact?userId=${userId}`);
 	const data = await res.json();
-	console.log('contacts', { data });
+	// console.log('contacts', { data });
 	return data;
 }
 
@@ -87,7 +87,7 @@ async function createContact(userId, contactId) {
 }
 
 async function fetchRoomMessages(roomId) {
-	console.log({ roomId });
+	// console.log({ roomId });
 	const res = await fetch(`http://localhost:3333/message/${roomId}`);
 	const data = await res.json();
 
@@ -95,7 +95,7 @@ async function fetchRoomMessages(roomId) {
 }
 
 async function createMessage(userId, roomId, text) {
-	console.log({ userId, text, roomId });
+	// console.log({ userId, text, roomId });
 
 	const res = await fetch(`http://localhost:3333/message`, {
 		method: 'POST',
@@ -112,7 +112,7 @@ async function createMessage(userId, roomId, text) {
 }
 
 function setGlobalUser(userData) {
-	console.log(userData);
+	// console.log(userData);
 
 	Object.keys(userData).forEach(key => {
 		appUser[key] = userData[key];
@@ -123,7 +123,7 @@ function setGlobalUser(userData) {
 		JSON.stringify(userData)
 	);
 
-	console.log({ appUser, userData });
+	// console.log({ appUser, userData });
 }
 
 export {
